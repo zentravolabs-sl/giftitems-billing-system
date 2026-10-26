@@ -4,6 +4,7 @@ import { WebsiteHeader } from "@/components/website-header";
 import { WebsiteFooter } from "@/components/website-footer";
 import { ProductCard } from "@/components/product-card";
 import { CartProvider } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 import { Sparkles, Tag, ArrowRight } from "lucide-react";
 
 export default async function OffersPage() {
@@ -32,15 +33,15 @@ export default async function OffersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1">
           {/* Header */}
           <div className="text-center max-w-xl mx-auto mb-10">
-            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#B85D4D] border border-[#E8998D]/40 inline-flex items-center gap-1.5 mb-2">
+            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#8F6B2A] border border-[#C5A059]/40 inline-flex items-center gap-1.5 mb-2">
               <Tag className="w-3.5 h-3.5" />
               Limited Promotional Privileges
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
-              Special Offers & Keepsake Baskets
+              Special Offers & Featured Sets
             </h1>
             <p className="text-xs sm:text-sm text-[#756C6A] mt-2">
-              Privilege pricing on hand-selected gift arrangements and complimentary luxury packaging
+              Promotional pricing on handcrafted wooden lights, everlasting faux botanicals, and home accents
             </p>
           </div>
 
@@ -50,22 +51,22 @@ export default async function OffersPage() {
               {coupons.map((c) => (
                 <div
                   key={c.id}
-                  className="p-5 rounded-2xl bg-white border border-[#E8998D]/40 shadow-xs flex items-center justify-between gap-4 relative overflow-hidden"
+                  className="p-5 rounded-2xl bg-white border border-[#C5A059]/40 shadow-xs flex items-center justify-between gap-4 relative overflow-hidden"
                 >
                   <div className="space-y-1">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF5EF] text-[#B85D4D] font-mono">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF5EF] text-[#8F6B2A] font-mono">
                       CODE: {c.code}
                     </span>
                     <h3 className="font-serif font-bold text-sm text-[#1A1817]">
                       {c.description || `${c.value}% Off Your Order`}
                     </h3>
                     <p className="text-[11px] text-[#756C6A]">
-                      Minimum purchase of ${Number(c.minPurchase).toFixed(2)}
+                      Minimum purchase of {formatPrice(c.minPurchase)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-serif font-bold text-[#B85D4D]">
-                      {c.discountType === "PERCENTAGE" ? `${c.value}%` : `$${c.value}`}
+                    <span className="text-2xl font-serif font-bold text-[#8F6B2A]">
+                      {c.discountType === "PERCENTAGE" ? `${c.value}%` : formatPrice(c.value)}
                     </span>
                     <span className="text-[10px] text-[#8C827E] block">OFF</span>
                   </div>
@@ -77,7 +78,7 @@ export default async function OffersPage() {
           {/* Products Grid */}
           <div className="mb-6 flex items-center justify-between">
             <h2 className="font-serif font-bold text-lg text-[#1A1817]">
-              Discounted Gift Selections ({discountedProducts.length})
+              Featured Offers ({discountedProducts.length})
             </h2>
           </div>
 

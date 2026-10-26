@@ -49,15 +49,15 @@ export default async function ProductPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-[#756C6A] mb-8">
-            <Link href="/" className="hover:text-[#B85D4D]">
+            <Link href="/" className="hover:text-[#8F6B2A]">
               Home
             </Link>
             <span>/</span>
-            <Link href="/shop" className="hover:text-[#B85D4D]">
+            <Link href="/shop" className="hover:text-[#8F6B2A]">
               Shop
             </Link>
             <span>/</span>
-            <Link href={`/categories/${product.category.slug}`} className="hover:text-[#B85D4D]">
+            <Link href={`/categories/${product.category.slug}`} className="hover:text-[#8F6B2A]">
               {product.category.name}
             </Link>
             <span>/</span>

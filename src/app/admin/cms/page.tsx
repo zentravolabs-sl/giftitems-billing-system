@@ -94,7 +94,7 @@ export default function AdminCmsPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           {saving ? "Publishing Changes..." : "Publish to Boutique"}
@@ -119,7 +119,7 @@ export default function AdminCmsPage() {
         {/* Top Announcement Bar */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-xs space-y-4">
           <h2 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B85D4D]" />
+            <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
             Promotional Announcement Banner (Navbar Ribbon)
           </h2>
 
@@ -129,7 +129,7 @@ export default function AdminCmsPage() {
               id="promoActive"
               checked={content.promoBannerActive}
               onChange={(e) => setContent({ ...content, promoBannerActive: e.target.checked })}
-              className="w-4 h-4 rounded text-[#B85D4D]"
+              className="w-4 h-4 rounded text-[#8F6B2A]"
             />
             <label htmlFor="promoActive" className="font-medium text-[#5C5452]">
               Enable announcement bar at top of website
@@ -160,7 +160,7 @@ export default function AdminCmsPage() {
         {/* Hero Section */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-xs space-y-4">
           <h2 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B85D4D]" />
+            <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
             Homepage Hero Showcase
           </h2>
 
@@ -221,7 +221,7 @@ export default function AdminCmsPage() {
                 onChange={(e) => setContent({ ...content, heroImageUrl: e.target.value })}
                 className="flex-1 px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none"
               />
-              <label className="px-3 py-2 rounded-xl border border-[#D0C7BC] hover:border-[#B85D4D] cursor-pointer text-[#5C5452] font-medium flex items-center gap-1.5 transition">
+              <label className="px-3 py-2 rounded-xl border border-[#D0C7BC] hover:border-[#8F6B2A] cursor-pointer text-[#5C5452] font-medium flex items-center gap-1.5 transition">
                 <Upload className="w-3.5 h-3.5" />
                 <span>Upload</span>
                 <input
@@ -238,7 +238,7 @@ export default function AdminCmsPage() {
         {/* About Us Story */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-xs space-y-4">
           <h2 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B85D4D]" />
+            <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
             About Us & Brand Heritage Story
           </h2>
 
@@ -266,7 +266,7 @@ export default function AdminCmsPage() {
         {/* Policies */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-xs space-y-4">
           <h2 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B85D4D]" />
+            <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
             Store Policies & Customer Commitments
           </h2>
 
@@ -314,7 +314,7 @@ export default function AdminCmsPage() {
         {/* Social Links */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-xs space-y-4">
           <h2 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B85D4D]" />
+            <span className="w-2 h-2 rounded-full bg-[#8F6B2A]" />
             Social Media & Community Handles
           </h2>
 
@@ -362,7 +362,7 @@ export default function AdminCmsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-3 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-sm transition disabled:opacity-50"
+            className="px-6 py-3 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-sm transition disabled:opacity-50"
           >
             {saving ? "Publishing Changes..." : "Publish Website Content"}
           </button>

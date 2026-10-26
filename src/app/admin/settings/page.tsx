@@ -69,7 +69,7 @@ export default function AdminSettingsPage() {
         <button
           onClick={handleSubmit}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition disabled:opacity-50"
         >
           <Save className="w-4 h-4" />
           {saving ? "Saving..." : "Save Settings"}
@@ -177,7 +177,7 @@ export default function AdminSettingsPage() {
             <label className="block font-semibold text-[#5C5452] mb-1">Currency Symbol</label>
             <input
               type="text"
-              value={settings.currencySymbol || "$"}
+              value={settings.currencySymbol || "Rs."}
               onChange={(e) => setSettings({ ...settings, currencySymbol: e.target.value })}
               className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none font-bold"
             />
@@ -201,7 +201,7 @@ export default function AdminSettingsPage() {
               id="enableTax"
               checked={settings.enableTax}
               onChange={(e) => setSettings({ ...settings, enableTax: e.target.checked })}
-              className="w-4 h-4 rounded text-[#B85D4D]"
+              className="w-4 h-4 rounded text-[#8F6B2A]"
             />
             <label htmlFor="enableTax" className="font-semibold text-[#1A1817]">
               Apply Sales Tax / VAT to POS and Website Invoices
@@ -249,7 +249,7 @@ export default function AdminSettingsPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2.5 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-sm transition disabled:opacity-50"
+            className="px-6 py-2.5 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-sm transition disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save Settings"}
           </button>

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Gift, Lock, Mail, User, Phone, ArrowRight } from "lucide-react";
+import { Lock, Mail, User, Phone, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -43,19 +43,25 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#2B2625] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center gap-2 mb-3 group">
-          <div className="w-12 h-12 rounded-full bg-[#E8998D]/20 border border-[#E8998D]/40 flex items-center justify-center text-[#B85D4D] group-hover:scale-105 transition-transform">
-            <Gift className="w-6 h-6" />
+        <Link href="/" className="inline-flex items-center gap-3 mb-3 group">
+          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#C5A059]/40 bg-[#FAF5EF] flex items-center justify-center group-hover:scale-105 transition-transform">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="Oak Bloom Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="font-serif text-2xl tracking-wider text-[#1A1817] font-semibold">
-            ZENTRAVO
-          </span>
+          <div className="text-left">
+            <span className="font-serif text-2xl tracking-wider text-[#1A1817] font-semibold block">
+              OAK BLOOM
+            </span>
+            <span className="text-[10px] uppercase tracking-widest text-[#8C827E] block -mt-1 font-sans">
+              Naturally Elegant
+            </span>
+          </div>
         </Link>
         <h2 className="text-2xl font-serif font-bold text-[#1A1817] tracking-tight">
           Create Your Boutique Account
         </h2>
         <p className="mt-1 text-sm text-[#756C6A]">
-          Join for personalized gift registries, order tracking, and exclusive previews
+          Join for order tracking, member pricing, and new collection previews
         </p>
       </div>
 
@@ -82,7 +88,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Eleanor Vance"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -101,7 +107,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="eleanor@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -119,7 +125,7 @@ export default function RegisterPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -138,7 +144,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -146,7 +152,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white bg-[#B85D4D] hover:bg-[#A04E40] active:scale-[0.99] transition shadow-sm disabled:opacity-50"
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white bg-[#8F6B2A] hover:bg-[#755518] active:scale-[0.99] transition shadow-sm disabled:opacity-50"
             >
               {loading ? (
                 "Creating Account..."
@@ -161,7 +167,7 @@ export default function RegisterPage() {
 
           <div className="mt-6 text-center text-xs text-[#756C6A]">
             Already have an account?{" "}
-            <Link href="/login" className="font-semibold text-[#B85D4D] hover:underline">
+            <Link href="/login" className="font-semibold text-[#8F6B2A] hover:underline">
               Sign In
             </Link>
           </div>

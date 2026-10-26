@@ -10,9 +10,10 @@ import {
   ShieldCheck,
   Truck,
   Heart,
-  Gift,
-  Star,
-  CheckCircle2,
+  Leaf,
+  Home,
+  Flower2,
+  Lamp,
 } from "lucide-react";
 
 export default async function HomePage() {
@@ -45,154 +46,185 @@ export default async function HomePage() {
 
   const heroImage =
     content?.heroImageUrl ||
-    "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1400&auto=format&fit=crop";
+    "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1400&auto=format&fit=crop";
 
   return (
     <CartProvider>
       <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#2B2625]">
         <WebsiteHeader />
 
-        {/* 1. HERO PROMOTIONAL BANNER */}
-        <section className="relative overflow-hidden bg-[#FAF5EF] border-b border-[#EAE5DD]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Narrative */}
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF5EF] border border-[#E8998D]/40 text-[#B85D4D] text-xs font-semibold shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>The Art of Thoughtful Gifting</span>
-              </div>
+        {/* 1. HERO BANNER */}
+        <section className="relative overflow-hidden bg-[#FAF6F0] border-b border-[#E5DFD5]">
+          {/* Soft ambient glows */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 -left-40 w-150 h-150 rounded-full bg-[#C5A059]/5 blur-3xl" />
+            <div className="absolute -bottom-32 -right-24 w-125 h-125 rounded-full bg-[#5F6340]/5 blur-3xl" />
+          </div>
 
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#1A1817] leading-[1.15]">
-                {content?.heroTitle || "Artisanal Gifts for Life's Cherished Moments"}
-              </h1>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
-              <p className="text-sm sm:text-base text-[#5C5452] max-w-xl leading-relaxed">
-                {content?.heroSubtitle ||
-                  "Discover hand-crafted gift hampers, bespoke jewellery, luxury candles, and personalized keepsakes curated with elegance."}
-              </p>
+                {/* Left Brand Editorial */}
+                <div className="lg:col-span-7 space-y-6">
+                  {/* Main H1 Headline */}
+                  <div>
+                    <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#24211D] tracking-tight leading-[1.15]">
+                      Handcrafted Wooden <br/> Lights,
+                      <span className="text-[#8F6B2A]">Artificial Flowers</span> <br/>
+                      &amp; Home Décor
+                    </h1>
+                    <div className="w-16 h-0.5 bg-[#8F6B2A]/50 mt-4 rounded-full" />
+                  </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <Link
-                  href={content?.heroButtonLink || "/shop"}
-                  className="px-7 py-3.5 rounded-xl bg-[#B85D4D] hover:bg-[#A04E40] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.99]"
-                >
-                  <span>{content?.heroButtonText || "Explore Collections"}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-[#4A443F] leading-relaxed max-w-xl">
+                    Oak Bloom is a thoughtfully curated collection of handcrafted wooden lights,
+                    artificial flowers, and elegant home décor pieces – designed to bring warmth,
+                    beauty, and timeless charm into your space.
+                  </p>
 
-                <Link
-                  href="/offers"
-                  className="px-7 py-3.5 rounded-xl bg-white hover:bg-[#FAF8F5] text-[#1A1817] border border-[#E0D9D1] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-2xs transition"
-                >
-                  <span>Special Offers</span>
-                </Link>
-              </div>
+                  {/* Signature Cursive Motto */}
+                  <p className="font-serif italic text-xl sm:text-2xl text-[#5F6340] tracking-wide">
+                    Glow Naturally, Bloom Beautifully. ♡
+                  </p>
 
-              {/* Trust Indicators */}
-              <div className="pt-4 border-t border-[#EAE5DD] grid grid-cols-3 gap-4 text-left">
-                <div>
-                  <span className="font-serif font-bold text-lg text-[#1A1817] block">100%</span>
-                  <span className="text-[11px] text-[#756C6A]">Master Artisanal</span>
+                  {/* CTA Button */}
+                  <div>
+                    <Link
+                      href={content?.heroButtonLink || "/shop"}
+                      className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#8F6B2A] hover:bg-[#755518] text-white text-xs font-bold uppercase tracking-wider shadow-md transition active:scale-[0.99]"
+                    >
+                      <span>{content?.heroButtonText || "Explore Collections"}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+
+                  {/* 4 Feature Badges */}
+                  <div className="pt-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-3.5 border border-[#E8E2D8] text-center shadow-2xs">
+                      <div className="w-10 h-10 rounded-full bg-[#5F6340] text-white flex items-center justify-center mx-auto mb-2">
+                        <Leaf className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#24211D] block">Natural Materials</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-3.5 border border-[#E8E2D8] text-center shadow-2xs">
+                      <div className="w-10 h-10 rounded-full bg-[#5F6340] text-white flex items-center justify-center mx-auto mb-2">
+                        <Heart className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#24211D] block">Handcrafted with Care</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-3.5 border border-[#E8E2D8] text-center shadow-2xs">
+                      <div className="w-10 h-10 rounded-full bg-[#5F6340] text-white flex items-center justify-center mx-auto mb-2">
+                        <Home className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#24211D] block">Made to Elevate</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-3.5 border border-[#E8E2D8] text-center shadow-2xs">
+                      <div className="w-10 h-10 rounded-full bg-[#5F6340] text-white flex items-center justify-center mx-auto mb-2">
+                        <Flower2 className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#24211D] block">Timeless Beauty</span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-serif font-bold text-lg text-[#1A1817] block">Same Day</span>
-                  <span className="text-[11px] text-[#756C6A]">Courier Delivery</span>
-                </div>
-                <div>
-                  <span className="font-serif font-bold text-lg text-[#1A1817] block">Complimentary</span>
-                  <span className="text-[11px] text-[#756C6A]">Handwritten Note</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Right Hero Image */}
-            <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-4/3 border-4 border-white">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={heroImage}
-                  alt="Zentravo Luxury Gifts"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+                {/* Right Hero Image */}
+                <div className="lg:col-span-5 relative">
+                  <div className="rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-white">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/hero.webp"
+                      alt="Oak Bloom Handcrafted Wooden Lights and Home Décor"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {/* Floating Badge */}
+                  <div className="absolute -bottom-4 -left-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-[#EAE5DD] shadow-lg flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#5F6340]/10 text-[#5F6340] flex items-center justify-center">
+                      <Lamp className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <span className="font-serif font-bold text-[11px] text-[#1A1817] block">Curved Oak Slatted Pendants</span>
+                      <span className="text-[10px] text-[#756C6A]">Warm architectural ambient glow</span>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Floating Badge */}
-              <div className="absolute -bottom-5 -left-5 bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-[#EAE5DD] shadow-lg flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center">
-                  <Gift className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="font-serif font-bold text-xs text-[#1A1817] block">
-                    Curated Keepsake Trunks
-                  </span>
-                  <span className="text-[10px] text-[#756C6A]">Finished with satin ribbon</span>
-                </div>
-              </div>
             </div>
           </div>
         </section>
 
-        {/* 2. VALUE PROPOSITIONS STRIP */}
-        <section className="bg-white py-10 border-b border-[#EAE5DD]">
+        {/* 2. OUR PROMISE RIBBON */}
+        <section className="bg-[#1A1817] py-10 border-b border-[#2E2B29]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-serif font-bold text-xs text-[#1A1817]">Signature Packaging</h4>
-                  <p className="text-[11px] text-[#756C6A]">Embossed gift boxes & silk tassels</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-serif font-bold text-xs text-[#1A1817]">Calligraphy Gift Card</h4>
-                  <p className="text-[11px] text-[#756C6A]">Personalized message included free</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center flex-shrink-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-2xl bg-[#8F6B2A]/20 border border-[#8F6B2A]/30 text-[#C5A059] flex items-center justify-center flex-shrink-0">
                   <Truck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-xs text-[#1A1817]">Concierge Express</h4>
-                  <p className="text-[11px] text-[#756C6A]">White-glove climate delivery</p>
+                  <h4 className="font-serif font-bold text-sm text-white mb-0.5">
+                    Free Delivery
+                  </h4>
+                  <p className="text-[12px] text-[#9E9690] leading-relaxed">On all orders — delivered safely to your door</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center flex-shrink-0">
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-2xl bg-[#8F6B2A]/20 border border-[#8F6B2A]/30 text-[#C5A059] flex items-center justify-center flex-shrink-0">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-xs text-[#1A1817]">100% Happiness Promise</h4>
-                  <p className="text-[11px] text-[#756C6A]">Hassle-free 14-day exchange</p>
+                  <h4 className="font-serif font-bold text-sm text-white mb-0.5">
+                    Quality Assured
+                  </h4>
+                  <p className="text-[12px] text-[#9E9690] leading-relaxed">Every piece inspected before it leaves our studio</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-2xl bg-[#8F6B2A]/20 border border-[#8F6B2A]/30 text-[#C5A059] flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-sm text-white mb-0.5">
+                    Artisan Packaging
+                  </h4>
+                  <p className="text-[12px] text-[#9E9690] leading-relaxed">Cushioned, eco-friendly wrapping on every order</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-2xl bg-[#8F6B2A]/20 border border-[#8F6B2A]/30 text-[#C5A059] flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-sm text-white mb-0.5">
+                    Locally Handmade
+                  </h4>
+                  <p className="text-[12px] text-[#9E9690] leading-relaxed">Supporting local artisans — made with love & care</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 3. CATEGORIES SHOWCASE */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+
+
+        {/* 4. SHOP BY COLLECTION */}
+        <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
-              <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
-                Curated Occasions
+              <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
+                Curated Categories
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1817]">
-                Shop by Gift Collection
+                Shop by Collection
               </h2>
             </div>
             <Link
               href="/categories"
-              className="text-xs font-bold text-[#B85D4D] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#8F6B2A] hover:underline flex items-center gap-1"
             >
               <span>View All Categories</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -204,17 +236,17 @@ export default async function HomePage() {
               <Link
                 key={cat.id}
                 href={`/categories/${cat.slug}`}
-                className="group flex flex-col items-center text-center p-3 rounded-2xl bg-white border border-[#EAE5DD] hover:border-[#B85D4D] hover:shadow-md transition"
+                className="group flex flex-col items-center text-center p-3 rounded-2xl bg-white border border-[#EAE5DD] hover:border-[#8F6B2A] hover:shadow-md transition"
               >
                 <div className="w-full aspect-square rounded-xl overflow-hidden bg-[#FAF5EF] mb-3 relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={cat.imageUrl || "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=300&auto=format&fit=crop"}
+                    src={cat.imageUrl || "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=300&auto=format&fit=crop"}
                     alt={cat.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 className="font-serif font-bold text-xs text-[#1A1817] group-hover:text-[#B85D4D] transition line-clamp-1">
+                <h3 className="font-serif font-bold text-xs text-[#1A1817] group-hover:text-[#8F6B2A] transition line-clamp-1">
                   {cat.name}
                 </h3>
               </Link>
@@ -222,22 +254,22 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 4. CURATED BEST SELLERS (DATABASE-BACKED) */}
+        {/* 5. SIGNATURE HIGHLIGHTS (FEATURED PRODUCTS) */}
         {featuredProducts.length > 0 && (
           <section className="py-12 bg-white border-y border-[#EAE5DD]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
                 <div>
-                  <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
-                    Signature Highlights
+                  <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
+                    Signature Artisanal Pieces
                   </span>
                   <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1817]">
-                    Most Loved Gift Keepsakes
+                    Most Loved Wooden Lights & Décor
                   </h2>
                 </div>
                 <Link
                   href="/shop"
-                  className="text-xs font-bold text-[#B85D4D] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-[#8F6B2A] hover:underline flex items-center gap-1"
                 >
                   <span>Explore Entire Catalogue</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -268,20 +300,20 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* 5. NEW ARRIVALS GRID */}
+        {/* 6. NEW ARRIVALS GRID */}
         <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
             <div>
-              <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
-                Just Arrived
+              <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
+                Fresh Drops
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1817]">
-                New Boutique Treasures
+                New Lights, Flowers & Accents
               </h2>
             </div>
             <Link
               href="/shop"
-              className="text-xs font-bold text-[#B85D4D] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#8F6B2A] hover:underline flex items-center gap-1"
             >
               <span>View All Items</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -310,25 +342,25 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 6. PROMOTIONAL CALLOUT BANNER */}
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="rounded-3xl bg-gradient-to-r from-[#2B2625] to-[#1A1817] text-white p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+        {/* 7. CUSTOM INTERIOR & LIGHTING BANNER */}
+        <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="rounded-3xl bg-gradient-to-r from-[#24211D] to-[#141211] text-white p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
             <div className="space-y-4 max-w-lg z-10">
-              <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#B85D4D] text-white">
-                VIP Concierge Gifting
+              <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#5F6340] text-white">
+                Bespoke Interior & Lighting Studio
               </span>
               <h3 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
-                Planning a Wedding or Corporate Celebration?
+                Looking for Custom Wooden Lighting or Styling Advice?
               </h3>
               <p className="text-xs text-[#D4CDC7] leading-relaxed">
-                Our bespoke concierge service crafts customized hampers, wax seals, monogrammed leather tags, and curated gourmet pairings for milestones.
+                Whether you need tailored pendant cord lengths, wholesale floral installations, or curated home décor packages for residential and commercial spaces, our studio is here to assist.
               </p>
               <div className="pt-2">
                 <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-[#1A1817] font-bold text-xs uppercase tracking-wider hover:bg-[#FAF8F5] transition shadow-xs"
                 >
-                  <span>Inquire with Concierge</span>
+                  <span>Inquire with Our Studio</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -337,8 +369,8 @@ export default async function HomePage() {
             <div className="relative w-full md:w-80 aspect-square rounded-2xl overflow-hidden border-2 border-white/20 flex-shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=600&auto=format&fit=crop"
-                alt="Bespoke Concierge"
+                src="https://images.unsplash.com/photo-1536626071326-72cd66f4b28f?q=80&w=600&auto=format&fit=crop"
+                alt="Bespoke Wooden Lighting Studio"
                 className="w-full h-full object-cover"
               />
             </div>

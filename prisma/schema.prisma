@@ -560,8 +560,8 @@ model BusinessSettings {
   whatsappNumber          String   @default("+18005554438")
   email                   String   @default("contact@zentravogifts.com")
   openingHours            String   @default("Mon - Sun: 9:00 AM - 9:00 PM")
-  currencySymbol          String   @default("$")
-  currencyCode            String   @default("USD")
+  currencySymbol          String   @default("Rs.")
+  currencyCode            String   @default("LKR")
   invoicePrefix           String   @default("ZGB-")
   receiptFooterMessage    String   @default("Thank you for shopping at Zentravo! Every gift tells a story.")
   logoUrl                 String?

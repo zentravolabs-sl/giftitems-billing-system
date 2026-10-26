@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Gift, Lock, Mail, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { Lock, Mail, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -69,13 +69,19 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#2B2625] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center gap-2 mb-3 group">
-          <div className="w-12 h-12 rounded-full bg-[#E8998D]/20 border border-[#E8998D]/40 flex items-center justify-center text-[#B85D4D] group-hover:scale-105 transition-transform">
-            <Gift className="w-6 h-6" />
+        <Link href="/" className="inline-flex items-center gap-3 mb-3 group">
+          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#C5A059]/40 bg-[#FAF5EF] flex items-center justify-center group-hover:scale-105 transition-transform">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="Oak Bloom Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="font-serif text-2xl tracking-wider text-[#1A1817] font-semibold">
-            ZENTRAVO
-          </span>
+          <div className="text-left">
+            <span className="font-serif text-2xl tracking-wider text-[#1A1817] font-semibold block">
+              OAK BLOOM
+            </span>
+            <span className="text-[10px] uppercase tracking-widest text-[#8C827E] block -mt-1 font-sans">
+              Naturally Elegant
+            </span>
+          </div>
         </Link>
         <h2 className="text-2xl font-serif font-bold text-[#1A1817] tracking-tight">
           Welcome to the Boutique
@@ -108,7 +114,7 @@ function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -127,7 +133,7 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-sm bg-[#FAF8F5]/50 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E0D9D1] focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-sm bg-[#FAF8F5]/50 transition"
                 />
               </div>
             </div>
@@ -135,7 +141,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white bg-[#B85D4D] hover:bg-[#A04E40] active:scale-[0.99] transition shadow-sm disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-medium text-white bg-[#8F6B2A] hover:bg-[#755518] active:scale-[0.99] transition shadow-sm disabled:opacity-50"
             >
               {loading ? (
                 "Signing In..."
@@ -151,7 +157,7 @@ function LoginForm() {
           {/* Quick Demo Credentials helper */}
           <div className="mt-6 pt-6 border-t border-[#F0EBE4]">
             <p className="text-xs font-medium text-[#756C6A] mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#B85D4D]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#8F6B2A]" />
               Quick Fill Demo Accounts:
             </p>
             <div className="grid grid-cols-2 gap-2 text-xs">
@@ -160,7 +166,7 @@ function LoginForm() {
                 onClick={() => setDemoCredentials("admin")}
                 className="p-2 text-left rounded-lg bg-[#FAF8F5] hover:bg-[#F3EFEA] border border-[#EBE5DC] text-[#3F3938] transition"
               >
-                <span className="font-semibold block text-[#B85D4D]">Admin / Manager</span>
+                <span className="font-semibold block text-[#8F6B2A]">Admin / Manager</span>
                 <span className="text-[11px] text-[#756C6A]">admin@zentravo.com</span>
               </button>
               <button
@@ -168,7 +174,7 @@ function LoginForm() {
                 onClick={() => setDemoCredentials("cashier")}
                 className="p-2 text-left rounded-lg bg-[#FAF8F5] hover:bg-[#F3EFEA] border border-[#EBE5DC] text-[#3F3938] transition"
               >
-                <span className="font-semibold block text-[#B85D4D]">POS Cashier</span>
+                <span className="font-semibold block text-[#8F6B2A]">POS Cashier</span>
                 <span className="text-[11px] text-[#756C6A]">cashier@zentravo.com</span>
               </button>
             </div>
@@ -176,7 +182,7 @@ function LoginForm() {
 
           <div className="mt-6 text-center text-xs text-[#756C6A]">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-semibold text-[#B85D4D] hover:underline">
+            <Link href="/register" className="font-semibold text-[#8F6B2A] hover:underline">
               Create an account
             </Link>
           </div>

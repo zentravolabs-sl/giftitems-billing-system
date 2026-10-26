@@ -13,6 +13,7 @@ import {
   DollarSign,
   Trash2,
 } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 
 interface Supplier {
   id: string;
@@ -222,7 +223,7 @@ export default function AdminPurchasesPage() {
 
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Receive Stock (GRN)
@@ -256,7 +257,7 @@ export default function AdminPurchasesPage() {
                   <tr key={p.id} className="hover:bg-[#FAF8F5]/60 transition">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-[#B85D4D]" />
+                        <FileText className="w-4 h-4 text-[#8F6B2A]" />
                         <div>
                           <span className="font-bold text-[#1A1817] block font-mono">{p.purchaseNumber}</span>
                           {p.invoiceNumber && (
@@ -278,15 +279,15 @@ export default function AdminPurchasesPage() {
                       </span>
                     </td>
                     <td className="py-3 px-3 text-right font-bold text-[#1A1817]">
-                      ${Number(p.grandTotal).toFixed(2)}
+                      {formatPrice(p.grandTotal)}
                     </td>
                     <td className="py-3 px-3 text-right">
                       <span className="text-emerald-700 block font-semibold">
-                        Paid: ${Number(p.paidAmount).toFixed(2)}
+                        Paid: {formatPrice(p.paidAmount)}
                       </span>
                       {Number(p.balanceDue) > 0 && (
                         <span className="text-rose-600 text-[10px] block">
-                          Due: ${Number(p.balanceDue).toFixed(2)}
+                          Due: {formatPrice(p.balanceDue)}
                         </span>
                       )}
                     </td>
@@ -374,7 +375,7 @@ export default function AdminPurchasesPage() {
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none font-semibold text-[#B85D4D]"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none font-semibold text-[#8F6B2A]"
                   >
                     <option value="RECEIVED">RECEIVED (Updates Stock & Weighted Avg Cost)</option>
                     <option value="ORDERED">ORDERED (Pending Delivery)</option>
@@ -389,7 +390,7 @@ export default function AdminPurchasesPage() {
                   <button
                     type="button"
                     onClick={addItemRow}
-                    className="text-xs text-[#B85D4D] font-semibold hover:underline flex items-center gap-1"
+                    className="text-xs text-[#8F6B2A] font-semibold hover:underline flex items-center gap-1"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Add Product Line
@@ -431,7 +432,7 @@ export default function AdminPurchasesPage() {
                           step="0.01"
                           min="0"
                           required
-                          placeholder="Unit Cost $"
+                          placeholder="Unit Cost (Rs.)"
                           value={it.unitCost}
                           onChange={(e) => updateItemRow(idx, "unitCost", e.target.value)}
                           className="w-full px-2 py-1.5 rounded-lg border border-[#E0D9D1] bg-white outline-none text-xs"
@@ -455,7 +456,7 @@ export default function AdminPurchasesPage() {
               {/* Financial Totals */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
                 <div>
-                  <label className="block text-[#756C6A] mb-1">Discount ($)</label>
+                  <label className="block text-[#756C6A] mb-1">Discount (Rs.)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -466,7 +467,7 @@ export default function AdminPurchasesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[#756C6A] mb-1">Shipping / Fees ($)</label>
+                  <label className="block text-[#756C6A] mb-1">Shipping / Fees (Rs.)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -477,7 +478,7 @@ export default function AdminPurchasesPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[#756C6A] mb-1">Amount Paid ($)</label>
+                  <label className="block text-[#756C6A] mb-1">Amount Paid (Rs.)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -517,7 +518,7 @@ export default function AdminPurchasesPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-[#B85D4D] text-white font-medium hover:bg-[#A04E40] disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#8F6B2A] text-white font-medium hover:bg-[#755518] disabled:opacity-50"
                 >
                   {submitting ? "Processing Transaction..." : "Confirm & Receive Stock"}
                 </button>

@@ -13,6 +13,7 @@ import {
   CreditCard,
   FileSpreadsheet,
 } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 
 export default function AdminReportsPage() {
   const [range, setRange] = useState("month");
@@ -52,7 +53,7 @@ export default function AdminReportsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Zentravo_Sales_Report_${range}_${Date.now()}.csv`;
+    a.download = `Oak_Bloom_Sales_Report_${range}_${Date.now()}.csv`;
     a.click();
   }
 
@@ -73,7 +74,7 @@ export default function AdminReportsPage() {
             <button
               onClick={() => setRange("today")}
               className={`px-3 py-1 rounded-lg transition ${
-                range === "today" ? "bg-[#B85D4D] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
+                range === "today" ? "bg-[#8F6B2A] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
               }`}
             >
               Today
@@ -81,7 +82,7 @@ export default function AdminReportsPage() {
             <button
               onClick={() => setRange("week")}
               className={`px-3 py-1 rounded-lg transition ${
-                range === "week" ? "bg-[#B85D4D] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
+                range === "week" ? "bg-[#8F6B2A] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
               }`}
             >
               7 Days
@@ -89,7 +90,7 @@ export default function AdminReportsPage() {
             <button
               onClick={() => setRange("month")}
               className={`px-3 py-1 rounded-lg transition ${
-                range === "month" ? "bg-[#B85D4D] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
+                range === "month" ? "bg-[#8F6B2A] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
               }`}
             >
               This Month
@@ -97,7 +98,7 @@ export default function AdminReportsPage() {
             <button
               onClick={() => setRange("all")}
               className={`px-3 py-1 rounded-lg transition ${
-                range === "all" ? "bg-[#B85D4D] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
+                range === "all" ? "bg-[#8F6B2A] text-white" : "text-[#756C6A] hover:text-[#1A1817]"
               }`}
             >
               All Time
@@ -108,7 +109,7 @@ export default function AdminReportsPage() {
             onClick={exportCSV}
             className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-white border border-[#E0D9D1] text-[#5C5452] hover:bg-[#FAF8F5] shadow-2xs flex items-center gap-1.5 transition"
           >
-            <Download className="w-3.5 h-3.5 text-[#B85D4D]" />
+            <Download className="w-3.5 h-3.5 text-[#8F6B2A]" />
             Export CSV
           </button>
         </div>
@@ -119,7 +120,7 @@ export default function AdminReportsPage() {
         <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-2xs">
           <span className="text-[10px] font-bold text-[#8C827E] uppercase tracking-wider">Net Sales Revenue</span>
           <p className="text-2xl font-serif font-bold text-[#1A1817] mt-2">
-            ${data?.summary.totalNetSales.toFixed(2) || "0.00"}
+            {formatPrice(data?.summary.totalNetSales)}
           </p>
           <p className="text-[11px] text-[#756C6A] mt-1">{data?.summary.invoicesCount || 0} completed invoices</p>
         </div>
@@ -127,7 +128,7 @@ export default function AdminReportsPage() {
         <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-2xs">
           <span className="text-[10px] font-bold text-[#8C827E] uppercase tracking-wider">Cost of Goods Sold (COGS)</span>
           <p className="text-2xl font-serif font-bold text-[#5C5452] mt-2">
-            ${data?.summary.totalCOGS.toFixed(2) || "0.00"}
+            {formatPrice(data?.summary.totalCOGS)}
           </p>
           <p className="text-[11px] text-[#756C6A] mt-1">Based on snapshot unit cost at sale</p>
         </div>
@@ -135,7 +136,7 @@ export default function AdminReportsPage() {
         <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-2xs">
           <span className="text-[10px] font-bold text-[#8C827E] uppercase tracking-wider">Gross Profit</span>
           <p className="text-2xl font-serif font-bold text-emerald-700 mt-2">
-            ${data?.summary.grossProfit.toFixed(2) || "0.00"}
+            {formatPrice(data?.summary.grossProfit)}
           </p>
           <p className="text-[11px] text-[#756C6A] mt-1">
             Margin:{" "}
@@ -147,8 +148,8 @@ export default function AdminReportsPage() {
 
         <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-2xs">
           <span className="text-[10px] font-bold text-[#8C827E] uppercase tracking-wider">Average Bill Value</span>
-          <p className="text-2xl font-serif font-bold text-[#B85D4D] mt-2">
-            ${data?.summary.averageBillValue.toFixed(2) || "0.00"}
+          <p className="text-2xl font-serif font-bold text-[#8F6B2A] mt-2">
+            {formatPrice(data?.summary.averageBillValue)}
           </p>
           <p className="text-[11px] text-[#756C6A] mt-1">Per transaction average</p>
         </div>
@@ -159,20 +160,20 @@ export default function AdminReportsPage() {
         {/* Channel Breakdown */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-2xs space-y-3">
           <h3 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-1.5">
-            <ShoppingBag className="w-4 h-4 text-[#B85D4D]" />
+            <ShoppingBag className="w-4 h-4 text-[#8F6B2A]" />
             Sales Channel Breakdown
           </h3>
           <div className="space-y-2 text-xs">
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF8F5]">
               <span className="font-semibold text-[#1A1817]">Point of Sale (POS Terminal)</span>
               <span className="font-bold text-[#1A1817]">
-                ${data?.channelBreakdown.POS ? data.channelBreakdown.POS.toFixed(2) : "0.00"}
+                {formatPrice(data?.channelBreakdown.POS || 0)}
               </span>
             </div>
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#FAF8F5]">
               <span className="font-semibold text-[#1A1817]">Website E-Commerce Orders</span>
               <span className="font-bold text-[#1A1817]">
-                ${data?.channelBreakdown.WEBSITE ? data.channelBreakdown.WEBSITE.toFixed(2) : "0.00"}
+                {formatPrice(data?.channelBreakdown.WEBSITE || 0)}
               </span>
             </div>
           </div>
@@ -181,7 +182,7 @@ export default function AdminReportsPage() {
         {/* Payment Breakdown */}
         <div className="bg-white p-5 rounded-2xl border border-[#EAE5DD] shadow-2xs space-y-3">
           <h3 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-1.5">
-            <CreditCard className="w-4 h-4 text-[#B85D4D]" />
+            <CreditCard className="w-4 h-4 text-[#8F6B2A]" />
             Payment Tender Breakdown
           </h3>
           <div className="space-y-2 text-xs">
@@ -189,7 +190,7 @@ export default function AdminReportsPage() {
               Object.entries(data.paymentBreakdown).map(([method, amount]: any) => (
                 <div key={method} className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5]">
                   <span className="font-semibold text-[#1A1817]">{method}</span>
-                  <span className="font-bold text-[#1A1817]">${amount.toFixed(2)}</span>
+                  <span className="font-bold text-[#1A1817]">{formatPrice(amount)}</span>
                 </div>
               ))
             ) : (
@@ -203,7 +204,7 @@ export default function AdminReportsPage() {
       <div className="bg-white rounded-2xl border border-[#EAE5DD] shadow-2xs overflow-hidden">
         <div className="p-4 border-b border-[#EAE5DD] flex items-center justify-between">
           <h3 className="font-serif font-bold text-sm text-[#1A1817]">Item-wise Sales & Profit Contribution</h3>
-          <span className="text-[11px] text-[#756C6A]">{data?.productSales?.length || 0} unique gift items sold</span>
+          <span className="text-[11px] text-[#756C6A]">{data?.productSales?.length || 0} unique items sold</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -227,9 +228,9 @@ export default function AdminReportsPage() {
                       <td className="py-3 px-4 font-semibold text-[#1A1817]">{p.name}</td>
                       <td className="py-3 px-3 font-mono text-[#756C6A]">{p.sku}</td>
                       <td className="py-3 px-3 text-center font-bold text-[#1A1817]">{p.qty}</td>
-                      <td className="py-3 px-3 text-right text-[#1A1817]">${p.revenue.toFixed(2)}</td>
-                      <td className="py-3 px-3 text-right text-[#756C6A]">${p.cogs.toFixed(2)}</td>
-                      <td className="py-3 px-4 text-right font-bold text-emerald-700">${profit.toFixed(2)}</td>
+                      <td className="py-3 px-3 text-right text-[#1A1817]">{formatPrice(p.revenue)}</td>
+                      <td className="py-3 px-3 text-right text-[#756C6A]">{formatPrice(p.cogs)}</td>
+                      <td className="py-3 px-4 text-right font-bold text-emerald-700">{formatPrice(profit)}</td>
                     </tr>
                   );
                 })

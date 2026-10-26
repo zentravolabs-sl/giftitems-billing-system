@@ -153,13 +153,13 @@ export default function AdminCategoriesPage() {
         <div>
           <h1 className="font-serif text-2xl font-bold text-[#1A1817]">Categories Management</h1>
           <p className="text-xs text-[#756C6A] mt-0.5">
-            Organize gift collections, banners, and store hierarchy
+            Organize décor collections, banners, and store hierarchy
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Add Category
@@ -297,7 +297,7 @@ export default function AdminCategoriesPage() {
                         : name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
                     });
                   }}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                 />
               </div>
 
@@ -331,7 +331,7 @@ export default function AdminCategoriesPage() {
                       <img src={formData.imageUrl} alt="" className="w-full h-full object-cover" />
                     </div>
                   )}
-                  <label className="px-3 py-1.5 rounded-lg border border-[#D0C7BC] hover:border-[#B85D4D] cursor-pointer text-[#5C5452] hover:text-[#B85D4D] transition flex items-center gap-1.5 font-medium">
+                  <label className="px-3 py-1.5 rounded-lg border border-[#D0C7BC] hover:border-[#8F6B2A] cursor-pointer text-[#5C5452] hover:text-[#8F6B2A] transition flex items-center gap-1.5 font-medium">
                     <Upload className="w-3.5 h-3.5" />
                     <span>{uploadingImage ? "Uploading..." : "Upload Cover Image"}</span>
                     <input
@@ -363,7 +363,7 @@ export default function AdminCategoriesPage() {
                       type="checkbox"
                       checked={formData.isActive}
                       onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                      className="w-4 h-4 rounded text-[#B85D4D]"
+                      className="w-4 h-4 rounded text-[#8F6B2A]"
                     />
                     <span>Active Category</span>
                   </label>
@@ -372,7 +372,7 @@ export default function AdminCategoriesPage() {
                       type="checkbox"
                       checked={formData.showOnWebsite}
                       onChange={(e) => setFormData({ ...formData, showOnWebsite: e.target.checked })}
-                      className="w-4 h-4 rounded text-[#B85D4D]"
+                      className="w-4 h-4 rounded text-[#8F6B2A]"
                     />
                     <span>Show on Website</span>
                   </label>
@@ -390,7 +390,7 @@ export default function AdminCategoriesPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-[#B85D4D] text-white font-medium hover:bg-[#A04E40]"
+                  className="px-5 py-2 rounded-xl bg-[#8F6B2A] text-white font-medium hover:bg-[#755518]"
                 >
                   {submitting ? "Saving..." : editingCategory ? "Update" : "Create"}
                 </button>

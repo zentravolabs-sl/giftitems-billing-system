@@ -135,20 +135,26 @@ export async function DELETE(
 ) {
   try {
     const user = await getCurrentUser();
-    if (!user || !hasPermission(user.role, [Role.ADMIN])) {
+    if (!user || !hasPermission(user.role, [Role.ADMIN, Role.INVENTORY_STAFF])) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
     const { id } = await params;
 
-    // Check if sales or purchases exist
-    const [salesCount, purchaseCount] = await Promise.all([
-      prisma.saleItem.count({ where: { productId: id } }),
-      prisma.purchaseItem.count({ where: { productId: id } }),
-    ]);
+    // Check if the product exists
+    const product = await prisma.product.findUnique({
+      where: { id },
+      select: { id: true, name: true },
+    });
 
-    if (salesCount > 0 || purchaseCount > 0) {
-      // Archive instead of hard delete to preserve financial integrity
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
+    const searchParams = req.nextUrl.searchParams;
+    const archiveOnly = searchParams.get("archive") === "true";
+
+    if (archiveOnly) {
       const archived = await prisma.product.update({
         where: { id },
         data: { isActive: false, showOnWebsite: false },
@@ -156,15 +162,29 @@ export async function DELETE(
       return NextResponse.json({
         success: true,
         archived: true,
-        message: "Product has associated transactions and was safely archived rather than deleted.",
+        message: `Product "${product.name}" was archived.`,
         product: archived,
       });
     }
 
-    await prisma.product.delete({ where: { id } });
-    return NextResponse.json({ success: true, message: "Product deleted permanently" });
-  } catch (error) {
+    // Completely remove the product and related records in a safe transaction
+    await prisma.$transaction(async (tx) => {
+      await tx.inventoryMovement.deleteMany({ where: { productId: id } });
+      await tx.productImage.deleteMany({ where: { productId: id } });
+      await tx.saleItem.deleteMany({ where: { productId: id } });
+      await tx.orderItem.deleteMany({ where: { productId: id } });
+      await tx.purchaseItem.deleteMany({ where: { productId: id } });
+      await tx.returnItem.deleteMany({ where: { productId: id } });
+      await tx.stockAdjustment.deleteMany({ where: { productId: id } });
+      await tx.product.delete({ where: { id } });
+    });
+
+    return NextResponse.json({ success: true, message: `Product "${product.name}" deleted successfully.` });
+  } catch (error: any) {
     console.error("Product delete error:", error);
-    return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
+    return NextResponse.json(
+      { error: error?.message || "Failed to delete product" },
+      { status: 500 }
+    );
   }
 }

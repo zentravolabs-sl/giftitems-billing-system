@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
     const minSpend = Number(coupon.minPurchase);
     if (subtotal < minSpend) {
       return NextResponse.json(
-        { error: `Minimum order value of $${minSpend.toFixed(2)} required for this code` },
+        { error: `Minimum order value of Rs. ${minSpend.toFixed(2)} required for this code` },
         { status: 400 }
       );
     }

@@ -12,13 +12,13 @@ import {
   ArrowRight,
   ArrowLeft,
   Truck,
-  Gift,
   Share2,
   AlertCircle,
 } from "lucide-react";
 import { WebsiteHeader } from "@/components/website-header";
 import { WebsiteFooter } from "@/components/website-footer";
 import { useCart, CartProvider } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 
 function CheckoutPageInner() {
   const router = useRouter();
@@ -96,9 +96,9 @@ function CheckoutPageInner() {
   function shareWhatsAppOrder() {
     if (!confirmedOrder) return;
     const cleanPhone = confirmedOrder.customerPhone.replace(/[^0-9]/g, "");
-    const msg = `✨ *Zentravo Order Confirmation* ✨\n` +
+    const msg = `✨ *Oak Bloom Order Confirmation* ✨\n` +
       `Thank you ${confirmedOrder.customerName}! Your order *#${confirmedOrder.orderNumber}* has been received.\n\n` +
-      `📦 *Total:* $${Number(confirmedOrder.grandTotal).toFixed(2)}\n` +
+      `📦 *Total:* ${formatPrice(confirmedOrder.grandTotal)}\n` +
       `🚚 *Destination:* ${confirmedOrder.shippingCity}, ${confirmedOrder.shippingAddress}\n\n` +
       `🔍 *Track Status:* ${window.location.origin}/orders/${confirmedOrder.orderNumber}`;
 
@@ -117,7 +117,7 @@ function CheckoutPageInner() {
             </div>
 
             <div>
-              <span className="text-xs font-bold text-[#B85D4D] uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-[#8F6B2A] uppercase tracking-wider block mb-1">
                 Thank You For Your Order
               </span>
               <h1 className="font-serif text-3xl font-bold text-[#1A1817]">
@@ -127,7 +127,7 @@ function CheckoutPageInner() {
                 Order Reference: {confirmedOrder.orderNumber}
               </p>
               <p className="text-xs text-[#756C6A] mt-2 max-w-md mx-auto">
-                A confirmation email has been sent to <strong>{confirmedOrder.customerEmail}</strong>. Our team is now preparing your gift presentation box.
+                A confirmation email has been sent to <strong>{confirmedOrder.customerEmail}</strong>. Our team is now preparing your handcrafted order with care.
               </p>
             </div>
 
@@ -145,7 +145,7 @@ function CheckoutPageInner() {
               </div>
               <div className="flex justify-between pt-2 border-t border-[#EAE5DD] font-bold">
                 <span>Grand Total:</span>
-                <span className="text-[#B85D4D]">${Number(confirmedOrder.grandTotal).toFixed(2)}</span>
+                <span className="text-[#8F6B2A]">{formatPrice(confirmedOrder.grandTotal)}</span>
               </div>
             </div>
 
@@ -162,7 +162,7 @@ function CheckoutPageInner() {
 
               <Link
                 href={`/orders/${confirmedOrder.orderNumber}`}
-                className="px-5 py-3 rounded-xl bg-[#B85D4D] text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#A04E40] transition"
+                className="px-5 py-3 rounded-xl bg-[#8F6B2A] text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#755518] transition"
               >
                 <span>Track Order Status</span>
                 <ArrowRight className="w-4 h-4" />
@@ -183,7 +183,7 @@ function CheckoutPageInner() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1">
         <Link
           href="/cart"
-          className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#B85D4D] font-medium mb-4 transition"
+          className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#8F6B2A] font-medium mb-4 transition"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Return to Shopping Bag</span>
@@ -206,7 +206,7 @@ function CheckoutPageInner() {
             {/* 1. Recipient Information */}
             <div className="bg-white rounded-3xl border border-[#EAE5DD] shadow-xs p-6 space-y-4 text-xs">
               <h2 className="font-serif font-bold text-base text-[#1A1817] flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center text-xs font-bold">1</span>
+                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#8F6B2A] flex items-center justify-center text-xs font-bold">1</span>
                 Recipient & Contact Information
               </h2>
 
@@ -219,7 +219,7 @@ function CheckoutPageInner() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="e.g. Lady Catherine de Bourgh"
-                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                   />
                 </div>
                 <div>
@@ -230,7 +230,7 @@ function CheckoutPageInner() {
                     value={customerEmail}
                     onChange={(e) => setCustomerEmail(e.target.value)}
                     placeholder="catherine@example.com"
-                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@ function CheckoutPageInner() {
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
                   placeholder="+1 (415) 555-7788"
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                  className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                 />
               </div>
             </div>
@@ -251,7 +251,7 @@ function CheckoutPageInner() {
             {/* 2. Delivery Address */}
             <div className="bg-white rounded-3xl border border-[#EAE5DD] shadow-xs p-6 space-y-4 text-xs">
               <h2 className="font-serif font-bold text-base text-[#1A1817] flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center text-xs font-bold">2</span>
+                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#8F6B2A] flex items-center justify-center text-xs font-bold">2</span>
                 White-Glove Delivery Address
               </h2>
 
@@ -263,7 +263,7 @@ function CheckoutPageInner() {
                   value={shippingAddress}
                   onChange={(e) => setShippingAddress(e.target.value)}
                   placeholder="e.g. 77 Crestview Terrace, Suite 400"
-                  className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                  className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                 />
               </div>
 
@@ -275,7 +275,7 @@ function CheckoutPageInner() {
                     required
                     value={shippingCity}
                     onChange={(e) => setShippingCity(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                   />
                 </div>
                 <div>
@@ -291,12 +291,12 @@ function CheckoutPageInner() {
               </div>
 
               <div>
-                <label className="block font-semibold text-[#5C5452] mb-1">Complimentary Gift Card Inscription & Notes</label>
+                <label className="block font-semibold text-[#5C5452] mb-1">Order Notes & Delivery Instructions</label>
                 <textarea
                   rows={2}
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
-                  placeholder="Write your custom message to be hand-scribed in our wax-sealed calligraphy card..."
+                  placeholder="Special delivery instructions, gate code, or specific requests for your items..."
                   className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] outline-none"
                 />
               </div>
@@ -305,7 +305,7 @@ function CheckoutPageInner() {
             {/* 3. Payment Method */}
             <div className="bg-white rounded-3xl border border-[#EAE5DD] shadow-xs p-6 space-y-4 text-xs">
               <h2 className="font-serif font-bold text-base text-[#1A1817] flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center text-xs font-bold">3</span>
+                <span className="w-6 h-6 rounded-full bg-[#FAF5EF] text-[#8F6B2A] flex items-center justify-center text-xs font-bold">3</span>
                 Select Payment Tender
               </h2>
 
@@ -313,18 +313,18 @@ function CheckoutPageInner() {
                 <label
                   className={`p-4 rounded-2xl border flex flex-col justify-between cursor-pointer transition ${
                     paymentMethod === "CASH"
-                      ? "border-[#B85D4D] bg-[#FAF5EF]"
+                      ? "border-[#8F6B2A] bg-[#FAF5EF]"
                       : "border-[#E0D9D1] hover:bg-[#FAF8F5]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <Banknote className="w-5 h-5 text-[#B85D4D]" />
+                    <Banknote className="w-5 h-5 text-[#8F6B2A]" />
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "CASH"}
                       onChange={() => setPaymentMethod("CASH")}
-                      className="text-[#B85D4D]"
+                      className="text-[#8F6B2A]"
                     />
                   </div>
                   <div>
@@ -336,18 +336,18 @@ function CheckoutPageInner() {
                 <label
                   className={`p-4 rounded-2xl border flex flex-col justify-between cursor-pointer transition ${
                     paymentMethod === "CARD"
-                      ? "border-[#B85D4D] bg-[#FAF5EF]"
+                      ? "border-[#8F6B2A] bg-[#FAF5EF]"
                       : "border-[#E0D9D1] hover:bg-[#FAF8F5]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <CreditCard className="w-5 h-5 text-[#B85D4D]" />
+                    <CreditCard className="w-5 h-5 text-[#8F6B2A]" />
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "CARD"}
                       onChange={() => setPaymentMethod("CARD")}
-                      className="text-[#B85D4D]"
+                      className="text-[#8F6B2A]"
                     />
                   </div>
                   <div>
@@ -359,18 +359,18 @@ function CheckoutPageInner() {
                 <label
                   className={`p-4 rounded-2xl border flex flex-col justify-between cursor-pointer transition ${
                     paymentMethod === "BANK_TRANSFER"
-                      ? "border-[#B85D4D] bg-[#FAF5EF]"
+                      ? "border-[#8F6B2A] bg-[#FAF5EF]"
                       : "border-[#E0D9D1] hover:bg-[#FAF8F5]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <Building2 className="w-5 h-5 text-[#B85D4D]" />
+                    <Building2 className="w-5 h-5 text-[#8F6B2A]" />
                     <input
                       type="radio"
                       name="payment"
                       checked={paymentMethod === "BANK_TRANSFER"}
                       onChange={() => setPaymentMethod("BANK_TRANSFER")}
-                      className="text-[#B85D4D]"
+                      className="text-[#8F6B2A]"
                     />
                   </div>
                   <div>
@@ -433,7 +433,7 @@ function CheckoutPageInner() {
                       <span className="text-[10px] text-[#756C6A]">Qty: {it.quantity}</span>
                     </div>
                     <span className="font-bold text-[#1A1817]">
-                      ${(Number(it.product.sellingPrice) * it.quantity).toFixed(2)}
+                      {formatPrice(Number(it.product.sellingPrice) * it.quantity)}
                     </span>
                   </div>
                 ))}
@@ -442,30 +442,30 @@ function CheckoutPageInner() {
               <div className="pt-3 border-t border-[#F0EBE4] space-y-2">
                 <div className="flex justify-between text-[#756C6A]">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
                 {discountTotal > 0 && (
-                  <div className="flex justify-between text-[#B85D4D] font-bold">
+                  <div className="flex justify-between text-[#8F6B2A] font-bold">
                     <span>Coupon Savings</span>
-                    <span>-${discountTotal.toFixed(2)}</span>
+                    <span>-{formatPrice(discountTotal)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-[#756C6A]">
                   <span>Delivery Fee</span>
-                  <span>{deliveryFee === 0 ? "Complimentary" : `$${deliveryFee.toFixed(2)}`}</span>
+                  <span>{deliveryFee === 0 ? "Complimentary" : formatPrice(deliveryFee)}</span>
                 </div>
                 <div className="pt-2 border-t border-[#EAE5DD] flex justify-between items-baseline font-bold text-sm">
                   <span>Grand Total</span>
-                  <span className="text-xl font-serif text-[#B85D4D]">${finalTotal.toFixed(2)}</span>
+                  <span className="text-xl font-serif text-[#8F6B2A]">{formatPrice(finalTotal)}</span>
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={loading || cart.length === 0}
-                className="w-full py-4 px-6 rounded-xl bg-[#B85D4D] hover:bg-[#A04E40] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.99] disabled:opacity-50"
+                className="w-full py-4 px-6 rounded-xl bg-[#8F6B2A] hover:bg-[#755518] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.99] disabled:opacity-50"
               >
-                <span>{loading ? "Confirming Order..." : `Place Order — $${finalTotal.toFixed(2)}`}</span>
+                <span>{loading ? "Confirming Order..." : `Place Order — ${formatPrice(finalTotal)}`}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

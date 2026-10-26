@@ -21,14 +21,14 @@ export default async function CategoriesPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex-1">
           <div className="text-center max-w-xl mx-auto mb-12">
-            <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
+            <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
               Curated Collections
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
-              Gift Categories & Themes
+              Explore by Collection
             </h1>
             <p className="text-xs sm:text-sm text-[#756C6A] mt-2">
-              Browse by artisanal discipline, from hand-poured botanical candles to extravagant keepsake trunks
+              Browse handcrafted wooden lighting, artificial flower arrangements, and timeless home accents
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export default async function CategoriesPage() {
               <Link
                 key={c.id}
                 href={`/categories/${c.slug}`}
-                className="group bg-white rounded-3xl border border-[#EAE5DD] overflow-hidden hover:border-[#E8998D] hover:shadow-lg transition-all duration-300 flex flex-col"
+                className="group bg-white rounded-3xl border border-[#EAE5DD] overflow-hidden hover:border-[#C5A059] hover:shadow-lg transition-all duration-300 flex flex-col"
               >
                 <div className="aspect-16/10 bg-[#FAF5EF] overflow-hidden relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -53,7 +53,7 @@ export default async function CategoriesPage() {
 
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-serif font-bold text-lg text-[#1A1817] group-hover:text-[#B85D4D] transition">
+                    <h3 className="font-serif font-bold text-lg text-[#1A1817] group-hover:text-[#8F6B2A] transition">
                       {c.name}
                     </h3>
                     {c.description && (
@@ -63,7 +63,7 @@ export default async function CategoriesPage() {
                     )}
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-[#F0EBE4] flex items-center justify-between text-xs font-bold text-[#B85D4D]">
+                  <div className="mt-5 pt-4 border-t border-[#F0EBE4] flex items-center justify-between text-xs font-bold text-[#8F6B2A]">
                     <span>Explore Collection</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>

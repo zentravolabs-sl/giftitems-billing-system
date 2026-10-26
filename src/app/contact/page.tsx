@@ -40,14 +40,14 @@ export default function ContactPage() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full flex-1">
           <div className="text-center max-w-xl mx-auto mb-12">
-            <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
+            <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
               Boutique Concierge
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
-              Contact Our Concierge Team
+              Contact Our Studio Team
             </h1>
             <p className="text-xs sm:text-sm text-[#756C6A] mt-2">
-              For bespoke gifting commissions, bridal registry, or corporate orders, we invite you to speak with our specialists.
+              For custom lighting inquiries, floral styling projects, or home décor orders, we invite you to speak with our artisans.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function ContactPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <MapPin className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+                    <MapPin className="w-4 h-4 text-[#8F6B2A] flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold text-[#1A1817] block">Showroom Address</span>
                       <span>{settings?.address || "108 Lotus Boulevard, Cinnamon Gardens"}</span>
@@ -69,7 +69,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <Phone className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+                    <Phone className="w-4 h-4 text-[#8F6B2A] flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold text-[#1A1817] block">Telephone Concierge</span>
                       <span>{settings?.phone || "+1 (800) 555-4438"}</span>
@@ -77,15 +77,15 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <Mail className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+                    <Mail className="w-4 h-4 text-[#8F6B2A] flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold text-[#1A1817] block">Email Inquiries</span>
-                      <span>{settings?.email || "concierge@zentravogifts.com"}</span>
+                      <span>{settings?.email || "concierge@oakbloom.com"}</span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <Clock className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+                    <Clock className="w-4 h-4 text-[#8F6B2A] flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold text-[#1A1817] block">Opening Hours</span>
                       <span>{settings?.openingHours || "Mon - Sun: 9:00 AM - 9:00 PM"}</span>
@@ -136,7 +136,7 @@ export default function ContactPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Eleanor Vance"
-                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                     />
                   </div>
 
@@ -148,25 +148,25 @@ export default function ContactPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="eleanor@example.com"
-                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-[#5C5452] mb-1">Message / Gifting Requirements *</label>
+                    <label className="block font-semibold text-[#5C5452] mb-1">Message / Project Inquiries *</label>
                     <textarea
                       rows={4}
                       required
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Tell us about the occasion, preferred items, estimated recipient count, or custom card inscription..."
-                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#E8998D]"
+                      placeholder="Tell us about your space, preferred lighting dimensions, floral styling needs, or bespoke requirements..."
+                      className="w-full px-3 py-2.5 rounded-xl border border-[#E0D9D1] outline-none focus:ring-2 focus:ring-[#C5A059]"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-xl bg-[#B85D4D] text-white font-bold text-xs uppercase tracking-wider hover:bg-[#A04E40] transition shadow-xs"
+                    className="w-full py-3.5 px-6 rounded-xl bg-[#8F6B2A] text-white font-bold text-xs uppercase tracking-wider hover:bg-[#755518] transition shadow-xs"
                   >
                     Send Message to Concierge
                   </button>

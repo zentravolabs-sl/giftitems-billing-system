@@ -132,7 +132,7 @@ export default function AdminInventoryPage() {
 
         <button
           onClick={openAdjustmentModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Stock Adjustment
@@ -360,7 +360,7 @@ export default function AdminInventoryPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-[#B85D4D] text-white font-medium hover:bg-[#A04E40] disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#8F6B2A] text-white font-medium hover:bg-[#755518] disabled:opacity-50"
                 >
                   {submitting ? "Writing Ledger..." : "Apply Adjustment"}
                 </button>

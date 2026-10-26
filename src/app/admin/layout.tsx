@@ -16,7 +16,6 @@ import {
   LogOut,
   Menu,
   X,
-  Gift,
   ExternalLink,
   Store,
 } from "lucide-react";
@@ -80,11 +79,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-[#E8998D]/20 text-[#B85D4D] flex items-center justify-center font-bold">
-              <Gift className="w-4 h-4" />
+            <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C5A059]/40 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="Oak Bloom" className="w-full h-full object-cover" />
             </div>
             <span className="font-serif font-bold text-sm tracking-wide text-[#1A1817]">
-              ZENTRAVO ADMIN
+              OAK BLOOM ADMIN
             </span>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="flex items-center gap-2">
           <Link
             href="/pos"
-            className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#B85D4D] text-white flex items-center gap-1"
+            className="px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#8F6B2A] text-white flex items-center gap-1"
           >
             <Store className="w-3.5 h-3.5" />
             POS
@@ -118,12 +118,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Brand Logo */}
           <div className="p-5 border-b border-[#F0EBE4] flex items-center justify-between">
             <Link href="/admin" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#E8998D]/20 border border-[#E8998D]/40 text-[#B85D4D] flex items-center justify-center shadow-xs">
-                <Gift className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden border border-[#C5A059]/40 flex items-center justify-center shadow-xs">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.jpg" alt="Oak Bloom" className="w-full h-full object-cover" />
               </div>
               <div>
                 <span className="font-serif font-bold text-base tracking-wider block text-[#1A1817]">
-                  ZENTRAVO
+                  OAK BLOOM
                 </span>
                 <span className="text-[10px] uppercase font-semibold tracking-widest text-[#968E88] block">
                   Management
@@ -137,14 +138,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link
               href="/"
               target="_blank"
-              className="text-xs text-[#756C6A] hover:text-[#B85D4D] font-medium flex items-center gap-1"
+              className="text-xs text-[#756C6A] hover:text-[#8F6B2A] font-medium flex items-center gap-1"
             >
               <ExternalLink className="w-3.5 h-3.5" />
               Customer Shop
             </Link>
             <Link
               href="/pos"
-              className="text-xs font-semibold px-2 py-0.5 rounded bg-[#B85D4D] text-white hover:bg-[#A04E40] transition flex items-center gap-1"
+              className="text-xs font-semibold px-2 py-0.5 rounded bg-[#8F6B2A] text-white hover:bg-[#755518] transition flex items-center gap-1"
             >
               <Store className="w-3 h-3" />
               Launch POS
@@ -163,7 +164,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition ${
                     isActive
-                      ? "bg-[#B85D4D] text-white shadow-xs"
+                      ? "bg-[#8F6B2A] text-white shadow-xs"
                       : "text-[#5C5452] hover:bg-[#F8F5F0] hover:text-[#1A1817]"
                   }`}
                 >
@@ -179,7 +180,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-3 border-t border-[#F0EBE4] bg-[#FAF8F5]">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-8 h-8 rounded-full bg-[#E8998D]/30 text-[#B85D4D] flex items-center justify-center font-bold text-xs uppercase flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[#C5A059]/30 text-[#8F6B2A] flex items-center justify-center font-bold text-xs uppercase flex-shrink-0">
                 {currentUser?.name?.[0] || "A"}
               </div>
               <div className="truncate text-xs">

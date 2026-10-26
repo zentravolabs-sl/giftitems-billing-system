@@ -17,6 +17,7 @@ import {
   Star,
   ExternalLink,
 } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 
 interface Category {
   id: string;
@@ -60,6 +61,9 @@ export default function AdminProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -237,16 +241,26 @@ export default function AdminProductsPage() {
     }
   }
 
-  async function handleDelete(id: string, name: string) {
-    if (!confirm(`Are you sure you want to delete or archive "${name}"?`)) return;
+  function handleDelete(id: string, name: string) {
+    setDeleteError(null);
+    setDeleteTarget({ id, name });
+  }
 
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setDeleteError(null);
     try {
-      const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/products/${deleteTarget.id}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to delete");
+      setDeleteTarget(null);
+      setDeleteError(null);
       loadData();
     } catch (err: any) {
-      alert(err.message);
+      setDeleteError(err.message || "An unexpected error occurred.");
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -263,7 +277,7 @@ export default function AdminProductsPage() {
 
         <button
           onClick={openCreateModal}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition"
         >
           <Plus className="w-4 h-4" />
           Add New Product
@@ -279,7 +293,7 @@ export default function AdminProductsPage() {
             placeholder="Search by product name, SKU, or barcode..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/50 focus:outline-none focus:ring-2 focus:ring-[#E8998D]"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/50 focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
           />
         </div>
 
@@ -288,7 +302,7 @@ export default function AdminProductsPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/50 focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-[#5C5452]"
+            className="px-3 py-2 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/50 focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-[#5C5452]"
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
@@ -358,15 +372,15 @@ export default function AdminProductsPage() {
                       </td>
                       <td className="py-3 px-3 text-[#5C5452]">{p.category?.name || "Uncategorized"}</td>
                       <td className="py-3 px-3 text-right text-[#756C6A]">
-                        ${Number(p.buyingCost).toFixed(2)}
+                        {formatPrice(p.buyingCost)}
                       </td>
                       <td className="py-3 px-3 text-right">
                         <span className="font-bold text-[#1A1817] block">
-                          ${Number(p.sellingPrice).toFixed(2)}
+                          {formatPrice(p.sellingPrice)}
                         </span>
                         {p.discountType !== "NONE" && (
-                          <span className="text-[10px] text-[#B85D4D] font-medium">
-                            {p.discountType === "PERCENTAGE" ? `-${p.discountValue}%` : `-$${p.discountValue}`}
+                          <span className="text-[10px] text-[#8F6B2A] font-medium">
+                            {p.discountType === "PERCENTAGE" ? `-${p.discountValue}%` : `-${formatPrice(p.discountValue)}`}
                           </span>
                         )}
                       </td>
@@ -387,12 +401,12 @@ export default function AdminProductsPage() {
                         <div className="flex items-center justify-center gap-1">
                           <span
                             className={`w-2 h-2 rounded-full ${
-                              p.isActive ? "bg-emerald-500" : "bg-gray-300"
+                              p.isActive ? "bg-emerald-500" : "bg-gray-400"
                             }`}
                             title={p.isActive ? "Active" : "Archived"}
                           />
                           <span className="text-[11px] text-[#756C6A]">
-                            {p.showOnWebsite ? "Online & POS" : "POS Only"}
+                            {!p.isActive ? "Archived" : p.showOnWebsite ? "Online & POS" : "POS Only"}
                           </span>
                         </div>
                       </td>
@@ -435,7 +449,7 @@ export default function AdminProductsPage() {
           <div className="bg-white rounded-2xl border border-[#EAE5DD] shadow-lg max-w-2xl w-full p-6 my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-4 border-b border-[#F0EBE4]">
               <h2 className="font-serif font-bold text-lg text-[#1A1817]">
-                {editingProduct ? "Edit Product" : "Add New Gift Item"}
+                {editingProduct ? "Edit Product" : "Add New Product"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -462,7 +476,7 @@ export default function AdminProductsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Imperial Velvet Keepsake Hamper"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                 />
               </div>
 
@@ -475,7 +489,7 @@ export default function AdminProductsPage() {
                     required
                     value={formData.sku}
                     onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                    className="w-full px-3 py-2 font-mono rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                    className="w-full px-3 py-2 font-mono rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                   />
                 </div>
                 <div>
@@ -485,7 +499,7 @@ export default function AdminProductsPage() {
                     value={formData.barcode}
                     onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
                     placeholder="e.g. 8934521001"
-                    className="w-full px-3 py-2 font-mono rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                    className="w-full px-3 py-2 font-mono rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                   />
                 </div>
               </div>
@@ -497,7 +511,7 @@ export default function AdminProductsPage() {
                   required
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                 >
                   <option value="">Select a category</option>
                   {categories.map((c) => (
@@ -511,7 +525,7 @@ export default function AdminProductsPage() {
               {/* Pricing & Cost */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#5C5452] mb-1">Buying Cost ($) *</label>
+                  <label className="block font-semibold text-[#5C5452] mb-1">Buying Cost (Rs.) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -519,11 +533,11 @@ export default function AdminProductsPage() {
                     required
                     value={formData.buyingCost}
                     onChange={(e) => setFormData({ ...formData, buyingCost: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#5C5452] mb-1">Selling Price ($) *</label>
+                  <label className="block font-semibold text-[#5C5452] mb-1">Selling Price (Rs.) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -531,7 +545,7 @@ export default function AdminProductsPage() {
                     required
                     value={formData.sellingPrice}
                     onChange={(e) => setFormData({ ...formData, sellingPrice: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none font-bold"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none font-bold"
                   />
                 </div>
                 <div>
@@ -544,7 +558,7 @@ export default function AdminProductsPage() {
                     >
                       <option value="NONE">None</option>
                       <option value="PERCENTAGE">% Off</option>
-                      <option value="FIXED">$ Off</option>
+                      <option value="FIXED">Rs. Off</option>
                     </select>
                     {formData.discountType !== "NONE" && (
                       <input
@@ -573,7 +587,7 @@ export default function AdminProductsPage() {
                     disabled={!!editingProduct}
                     value={formData.stockQuantity}
                     onChange={(e) => setFormData({ ...formData, stockQuantity: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none disabled:bg-[#FAF8F5]"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none disabled:bg-[#FAF8F5]"
                   />
                 </div>
                 <div>
@@ -586,7 +600,7 @@ export default function AdminProductsPage() {
                     min="0"
                     value={formData.minStockLevel}
                     onChange={(e) => setFormData({ ...formData, minStockLevel: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                   />
                 </div>
               </div>
@@ -599,7 +613,7 @@ export default function AdminProductsPage() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Details regarding materials, fragrance notes, artisan origin, presentation box..."
-                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#E8998D] outline-none"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E0D9D1] focus:ring-2 focus:ring-[#C5A059] outline-none"
                 />
               </div>
 
@@ -622,7 +636,7 @@ export default function AdminProductsPage() {
                         type="button"
                         onClick={() => setPrimaryImage(idx)}
                         className={`absolute bottom-1 left-1 px-1 py-0.5 rounded text-[8px] font-bold ${
-                          img.isPrimary ? "bg-[#B85D4D] text-white" : "bg-black/60 text-white"
+                          img.isPrimary ? "bg-[#8F6B2A] text-white" : "bg-black/60 text-white"
                         }`}
                       >
                         {img.isPrimary ? "Primary" : "Make Primary"}
@@ -630,7 +644,7 @@ export default function AdminProductsPage() {
                     </div>
                   ))}
 
-                  <label className="w-16 h-16 rounded-xl border-2 border-dashed border-[#D0C7BC] hover:border-[#B85D4D] flex flex-col items-center justify-center cursor-pointer text-[#756C6A] hover:text-[#B85D4D] transition">
+                  <label className="w-16 h-16 rounded-xl border-2 border-dashed border-[#D0C7BC] hover:border-[#8F6B2A] flex flex-col items-center justify-center cursor-pointer text-[#756C6A] hover:text-[#8F6B2A] transition">
                     <Upload className="w-4 h-4 mb-0.5" />
                     <span className="text-[9px] font-medium">{uploadingImage ? "..." : "Upload"}</span>
                     <input
@@ -651,7 +665,7 @@ export default function AdminProductsPage() {
                     type="checkbox"
                     checked={formData.isActive}
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="w-4 h-4 rounded text-[#B85D4D] focus:ring-[#B85D4D]"
+                    className="w-4 h-4 rounded text-[#8F6B2A] focus:ring-[#8F6B2A]"
                   />
                   <span className="text-xs text-[#5C5452]">Active Item</span>
                 </label>
@@ -661,7 +675,7 @@ export default function AdminProductsPage() {
                     type="checkbox"
                     checked={formData.showOnWebsite}
                     onChange={(e) => setFormData({ ...formData, showOnWebsite: e.target.checked })}
-                    className="w-4 h-4 rounded text-[#B85D4D] focus:ring-[#B85D4D]"
+                    className="w-4 h-4 rounded text-[#8F6B2A] focus:ring-[#8F6B2A]"
                   />
                   <span className="text-xs text-[#5C5452]">Website Store</span>
                 </label>
@@ -671,7 +685,7 @@ export default function AdminProductsPage() {
                     type="checkbox"
                     checked={formData.isFeatured}
                     onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                    className="w-4 h-4 rounded text-[#B85D4D] focus:ring-[#B85D4D]"
+                    className="w-4 h-4 rounded text-[#8F6B2A] focus:ring-[#8F6B2A]"
                   />
                   <span className="text-xs text-[#5C5452]">Featured</span>
                 </label>
@@ -689,13 +703,72 @@ export default function AdminProductsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 rounded-xl bg-[#B85D4D] text-white font-medium hover:bg-[#A04E40] transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-[#8F6B2A] text-white font-medium hover:bg-[#755518] transition disabled:opacity-50"
                 >
                   {submitting ? "Saving..." : editingProduct ? "Update Product" : "Create Product"}
                 </button>
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div
+            className="bg-white rounded-2xl border border-[#EAE5DD] shadow-2xl max-w-sm w-full p-6"
+            style={{ animation: "fadeScaleIn 0.18s ease" }}
+          >
+            {/* Icon */}
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-rose-50 border border-rose-100 mx-auto mb-4">
+              <Trash2 className="w-6 h-6 text-rose-500" />
+            </div>
+
+            {/* Text */}
+            <h2 className="font-serif font-bold text-lg text-[#1A1817] text-center">Delete Product?</h2>
+            <p className="mt-2 text-xs text-[#756C6A] text-center leading-relaxed">
+              You are about to permanently delete or archive{" "}
+              <span className="font-semibold text-[#1A1817]">&ldquo;{deleteTarget.name}&rdquo;</span>.
+              This action cannot be undone.
+            </p>
+
+            {deleteError && (
+              <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start gap-2 text-left">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span className="leading-snug">{deleteError}</span>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <button
+                onClick={() => {
+                  setDeleteTarget(null);
+                  setDeleteError(null);
+                }}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-xl border border-[#E0D9D1] text-xs font-semibold text-[#756C6A] hover:bg-[#FAF8F5] transition disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 transition disabled:opacity-60 flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                {deleting ? "Deleting..." : "Yes, Delete"}
+              </button>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes fadeScaleIn {
+              from { opacity: 0; transform: scale(0.95); }
+              to   { opacity: 1; transform: scale(1); }
+            }
+          `}</style>
         </div>
       )}
     </div>

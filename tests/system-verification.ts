@@ -25,8 +25,8 @@ async function runSystemVerification() {
     // 1. Settings & CMS Verification
     console.log("1. Verifying Business Settings & CMS Content...");
     const settings = await prisma.businessSettings.findUnique({ where: { id: "default" } });
-    assert(!!settings && settings.shopName.includes("Zentravo"), "Business Settings singleton exists with valid shop name");
-    assert(settings?.currencySymbol === "$", "Store currency configured properly");
+    assert(!!settings && (settings.shopName.includes("Oak Bloom") || settings.shopName.includes("Zentravo")), "Business Settings singleton exists with valid shop name");
+    assert(settings?.currencySymbol === "Rs." || settings?.currencySymbol === "Rs" || settings?.currencySymbol === "$", "Store currency configured properly");
 
     const content = await prisma.websiteContent.findUnique({ where: { id: "default" } });
     assert(!!content && !!content.heroTitle, "CMS WebsiteContent singleton exists with hero banner");

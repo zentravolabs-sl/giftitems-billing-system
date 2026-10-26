@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ShoppingBag, Search, Filter, CheckCircle2, Clock, Truck, X, Eye, Package, Phone, Mail } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 
 interface OrderItem {
   id: string;
@@ -150,7 +151,7 @@ export default function AdminOrdersPage() {
                       {o.shippingCity}, {o.shippingAddress}
                     </td>
                     <td className="py-3 px-3 text-right font-bold text-[#1A1817]">
-                      ${Number(o.grandTotal).toFixed(2)}
+                      {formatPrice(o.grandTotal)}
                     </td>
                     <td className="py-3 px-3 text-center">
                       <span
@@ -233,11 +234,11 @@ export default function AdminOrdersPage() {
                 <span className="text-[10px] text-[#756C6A] uppercase font-semibold">Customer Info</span>
                 <p className="font-bold text-[#1A1817] mt-0.5">{selectedOrder.customerName}</p>
                 <p className="text-[#5C5452] flex items-center gap-1 mt-0.5">
-                  <Phone className="w-3 h-3 text-[#B85D4D]" />
+                  <Phone className="w-3 h-3 text-[#8F6B2A]" />
                   {selectedOrder.customerPhone}
                 </p>
                 <p className="text-[#5C5452] flex items-center gap-1 mt-0.5">
-                  <Mail className="w-3 h-3 text-[#B85D4D]" />
+                  <Mail className="w-3 h-3 text-[#8F6B2A]" />
                   {selectedOrder.customerEmail}
                 </p>
               </div>
@@ -246,24 +247,24 @@ export default function AdminOrdersPage() {
                 <p className="text-[#1A1817] mt-0.5">{selectedOrder.shippingAddress}</p>
                 <p className="text-[#5C5452] font-semibold">{selectedOrder.shippingCity}</p>
                 {selectedOrder.orderNotes && (
-                  <p className="text-[10px] text-[#B85D4D] italic mt-1">Note: {selectedOrder.orderNotes}</p>
+                  <p className="text-[10px] text-[#8F6B2A] italic mt-1">Note: {selectedOrder.orderNotes}</p>
                 )}
               </div>
             </div>
 
             {/* Items */}
             <div className="mt-4 space-y-2 border-t border-[#F0EBE4] pt-3">
-              <span className="font-semibold text-[#1A1817] block">Purchased Gift Items</span>
+              <span className="font-semibold text-[#1A1817] block">Ordered Items</span>
               <div className="space-y-1.5">
                 {selectedOrder.items?.map((it, idx) => (
                   <div key={idx} className="flex justify-between items-center py-1 border-b border-[#F8F5F0]">
                     <div>
                       <span className="font-semibold text-[#1A1817] block">{it.product?.name || "Item"}</span>
                       <span className="text-[10px] text-[#756C6A]">
-                        ${Number(it.unitPrice).toFixed(2)} x {Number(it.quantity)}
+                        {formatPrice(it.unitPrice)} x {Number(it.quantity)}
                       </span>
                     </div>
-                    <span className="font-bold text-[#1A1817]">${Number(it.lineTotal).toFixed(2)}</span>
+                    <span className="font-bold text-[#1A1817]">{formatPrice(it.lineTotal)}</span>
                   </div>
                 ))}
               </div>
@@ -273,23 +274,23 @@ export default function AdminOrdersPage() {
             <div className="mt-4 pt-3 border-t border-[#F0EBE4] space-y-1">
               <div className="flex justify-between text-[#756C6A]">
                 <span>Subtotal:</span>
-                <span>${Number(selectedOrder.subtotal).toFixed(2)}</span>
+                <span>{formatPrice(selectedOrder.subtotal)}</span>
               </div>
               {Number(selectedOrder.deliveryFee) > 0 && (
                 <div className="flex justify-between text-[#756C6A]">
                   <span>Delivery Fee:</span>
-                  <span>${Number(selectedOrder.deliveryFee).toFixed(2)}</span>
+                  <span>{formatPrice(selectedOrder.deliveryFee)}</span>
                 </div>
               )}
               {Number(selectedOrder.discountAmount) > 0 && (
-                <div className="flex justify-between text-[#B85D4D]">
+                <div className="flex justify-between text-[#8F6B2A]">
                   <span>Coupon Discount:</span>
-                  <span>-${Number(selectedOrder.discountAmount).toFixed(2)}</span>
+                  <span>-{formatPrice(selectedOrder.discountAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-sm text-[#1A1817] pt-1 border-t border-[#EAE5DD]">
                 <span>Grand Total:</span>
-                <span className="text-[#B85D4D]">${Number(selectedOrder.grandTotal).toFixed(2)}</span>
+                <span className="text-[#8F6B2A]">{formatPrice(selectedOrder.grandTotal)}</span>
               </div>
             </div>
 
@@ -297,7 +298,7 @@ export default function AdminOrdersPage() {
               <button
                 type="button"
                 onClick={() => setSelectedOrder(null)}
-                className="px-5 py-2 rounded-xl bg-[#B85D4D] text-white font-semibold"
+                className="px-5 py-2 rounded-xl bg-[#8F6B2A] text-white font-semibold"
               >
                 Close
               </button>

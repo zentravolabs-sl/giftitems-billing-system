@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Gift, ShoppingBag, User, Search, Menu, X, ArrowRight, Store, ShieldCheck } from "lucide-react";
+import { ShoppingBag, User, Search, Menu, X, ArrowRight, Store, ShieldCheck } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
 export function WebsiteHeader() {
@@ -48,7 +48,7 @@ export function WebsiteHeader() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#EFECE8]">
       {/* Top Announcement Ribbon */}
       {content?.promoBannerActive && content?.promoBannerText && (
-        <div className="bg-[#B85D4D] text-white py-1.5 px-4 text-center text-[11px] font-medium tracking-wide">
+        <div className="bg-[#8F6B2A] text-white py-1.5 px-4 text-center text-[11px] font-medium tracking-wide">
           <Link
             href={content.promoBannerLink || "/offers"}
             className="hover:underline inline-flex items-center gap-1.5 justify-center"
@@ -71,16 +71,17 @@ export function WebsiteHeader() {
         </button>
 
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-full bg-[#FAF5EF] border border-[#E8998D]/40 text-[#B85D4D] flex items-center justify-center shadow-xs group-hover:scale-105 transition">
-            <Gift className="w-5 h-5" />
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-[#C5A059]/40 shadow-xs group-hover:scale-105 transition bg-[#FAF5EF] flex items-center justify-center flex-shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="Oak Bloom Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <span className="font-serif font-bold text-xl tracking-wider text-[#1A1817] block">
-              ZENTRAVO
+              OAK BLOOM
             </span>
-            <span className="text-[9px] uppercase tracking-widest text-[#8C827E] block -mt-1 font-sans">
-              Luxury Gifts & Hampers
+            <span className="text-[9px] uppercase tracking-widest text-[#8F6B2A] font-semibold block -mt-0.5 font-sans">
+              LIGHTS | FLOWERS | HOME DÉCOR
             </span>
           </div>
         </Link>
@@ -93,13 +94,13 @@ export function WebsiteHeader() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`transition hover:text-[#B85D4D] relative py-1 ${
-                  isActive ? "text-[#B85D4D]" : ""
+                className={`transition hover:text-[#8F6B2A] relative py-1 ${
+                  isActive ? "text-[#8F6B2A]" : ""
                 }`}
               >
                 {link.name}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B85D4D] rounded-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8F6B2A] rounded-full" />
                 )}
               </Link>
             );
@@ -112,7 +113,7 @@ export function WebsiteHeader() {
           {currentUser && ["SUPER_ADMIN", "ADMIN", "INVENTORY_STAFF", "ACCOUNTANT"].includes(currentUser.role) && (
             <Link
               href="/admin"
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FAF5EF] border border-[#EAE5DD] text-[11px] font-semibold text-[#B85D4D] hover:bg-[#F0EBE4]"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#FAF5EF] border border-[#EAE5DD] text-[11px] font-semibold text-[#8F6B2A] hover:bg-[#F0EBE4]"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               Admin
@@ -123,7 +124,7 @@ export function WebsiteHeader() {
           {currentUser && ["SUPER_ADMIN", "ADMIN", "CASHIER"].includes(currentUser.role) && (
             <Link
               href="/pos"
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#B85D4D] text-[11px] font-semibold text-white hover:bg-[#A04E40]"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#8F6B2A] text-[11px] font-semibold text-white hover:bg-[#755518]"
             >
               <Store className="w-3.5 h-3.5" />
               Launch POS
@@ -145,9 +146,9 @@ export function WebsiteHeader() {
             className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#FAF5EF] hover:bg-[#F3EFEA] border border-[#EAE5DD] text-[#1A1817] transition group"
           >
             <div className="relative">
-              <ShoppingBag className="w-5 h-5 text-[#B85D4D] group-hover:scale-105 transition-transform" />
+              <ShoppingBag className="w-5 h-5 text-[#8F6B2A] group-hover:scale-105 transition-transform" />
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full bg-[#B85D4D] text-white text-[10px] font-bold flex items-center justify-center animate-in zoom-in">
+                <span className="absolute -top-1.5 -right-2 w-4 h-4 rounded-full bg-[#8F6B2A] text-white text-[10px] font-bold flex items-center justify-center animate-in zoom-in">
                   {totalItems}
                 </span>
               )}
@@ -166,7 +167,7 @@ export function WebsiteHeader() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="py-2 px-3 rounded-lg hover:bg-[#FAF8F5] hover:text-[#B85D4D]"
+                className="py-2 px-3 rounded-lg hover:bg-[#FAF8F5] hover:text-[#8F6B2A]"
               >
                 {link.name}
               </Link>
@@ -175,14 +176,14 @@ export function WebsiteHeader() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-[#B85D4D] py-1 font-bold"
+                className="text-[#8F6B2A] py-1 font-bold"
               >
                 {currentUser ? `Signed in as ${currentUser.name}` : "Sign In / Register"}
               </Link>
               <Link
                 href="/pos"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-2.5 py-1 text-xs rounded-lg bg-[#B85D4D] text-white font-semibold flex items-center gap-1"
+                className="px-2.5 py-1 text-xs rounded-lg bg-[#8F6B2A] text-white font-semibold flex items-center gap-1"
               >
                 <Store className="w-3.5 h-3.5" />
                 POS

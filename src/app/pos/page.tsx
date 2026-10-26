@@ -33,8 +33,8 @@ import {
   LogOut,
   Maximize,
   HelpCircle,
-  ExternalLink,
 } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 import {
   cacheProducts,
   getCachedProducts,
@@ -103,6 +103,7 @@ export default function PosPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [storeSettings, setStoreSettings] = useState<any>(null);
+  const currencySymbol = storeSettings?.currencySymbol || "Rs.";
   const [currentUser, setCurrentUser] = useState<any>(null);
 
   // Connectivity & Sync
@@ -473,7 +474,7 @@ export default function PosPage() {
 
       if (paymentMethod === "CASH") {
         if (cashTendered < grandTotal) {
-          throw new Error(`Tendered cash ($${cashTendered.toFixed(2)}) is less than total ($${grandTotal.toFixed(2)})`);
+          throw new Error(`Tendered cash (${formatPrice(cashTendered, currencySymbol)}) is less than total (${formatPrice(grandTotal, currencySymbol)})`);
         }
         amountPaid = cashTendered;
         changeAmount = Math.round((cashTendered - grandTotal) * 100) / 100;
@@ -492,7 +493,7 @@ export default function PosPage() {
       } else if (paymentMethod === "SPLIT") {
         const splitSum = Math.round((splitCash + splitCard) * 100) / 100;
         if (Math.abs(splitSum - grandTotal) > 0.05) {
-          throw new Error(`Split tender ($${splitSum.toFixed(2)}) does not match bill total ($${grandTotal.toFixed(2)})`);
+          throw new Error(`Split tender (${formatPrice(splitSum, currencySymbol)}) does not match bill total (${formatPrice(grandTotal, currencySymbol)})`);
         }
         amountPaid = splitSum;
         changeAmount = 0;
@@ -650,22 +651,22 @@ export default function PosPage() {
     const itemsSummary = completedSale.items
       .map(
         (it: any) =>
-          `• ${it.product?.name || it.productName || "Item"} x${it.quantity} - $${Number(it.lineTotal).toFixed(2)}`
+          `• ${it.product?.name || it.productName || "Item"} x${it.quantity} - ${formatPrice(it.lineTotal, currencySymbol)}`
       )
       .join("\n");
 
-    const message = `✨ *${storeSettings?.shopName || "Zentravo Luxury Gifts"}* ✨\n` +
+    const message = `✨ *${storeSettings?.shopName || "Oak Bloom"}* ✨\n` +
       `Thank you for shopping with us!\n\n` +
       `🧾 *Invoice:* ${completedSale.invoiceNumber}\n` +
       `📅 *Date:* ${new Date(completedSale.createdAt).toLocaleDateString()}\n` +
       `👤 *Customer:* ${completedSale.customer?.name || "Valued Guest"}\n\n` +
       `*Items Purchased:*\n${itemsSummary}\n\n` +
-      `💰 *Subtotal:* $${Number(completedSale.subtotal).toFixed(2)}\n` +
-      (Number(completedSale.cartDiscount) > 0 ? `🏷️ *Discount:* -$${Number(completedSale.cartDiscount).toFixed(2)}\n` : "") +
-      (Number(completedSale.taxAmount) > 0 ? `🏛️ *Tax:* $${Number(completedSale.taxAmount).toFixed(2)}\n` : "") +
-      `*Grand Total:* $${Number(completedSale.grandTotal).toFixed(2)}\n\n` +
+      `💰 *Subtotal:* ${formatPrice(completedSale.subtotal, currencySymbol)}\n` +
+      (Number(completedSale.cartDiscount) > 0 ? `🏷️ *Discount:* -${formatPrice(completedSale.cartDiscount, currencySymbol)}\n` : "") +
+      (Number(completedSale.taxAmount) > 0 ? `🏛️ *Tax:* ${formatPrice(completedSale.taxAmount, currencySymbol)}\n` : "") +
+      `*Grand Total:* ${formatPrice(completedSale.grandTotal, currencySymbol)}\n\n` +
       `🔗 *View Digital Receipt:* ${window.location.origin}/pos/receipt/${completedSale.invoiceNumber}\n\n` +
-      `${storeSettings?.receiptFooterMessage || "Every gift tells a story."}`;
+      `${storeSettings?.receiptFooterMessage || "Glow Naturally, Bloom Beautifully. Thank you for supporting handmade & local ♥"}`;
 
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, "_blank");
   }
@@ -688,12 +689,13 @@ export default function PosPage() {
         {/* Left: Brand & Navigation Tabs */}
         <div className="flex items-center gap-6">
           <Link href="/pos" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-[#E8998D]/20 border border-[#E8998D]/40 text-[#B85D4D] flex items-center justify-center font-bold">
-              <Store className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#C5A059]/40 flex items-center justify-center font-bold">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="Oak Bloom" className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-serif font-bold text-sm tracking-wider block text-[#1A1817]">
-                ZENTRAVO POS
+                OAK BLOOM POS
               </span>
               <span className="text-[9px] uppercase tracking-widest text-[#8C827E] block leading-none">
                 Register #01
@@ -706,7 +708,7 @@ export default function PosPage() {
               onClick={() => setActiveTab("register")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === "register"
-                  ? "bg-[#B85D4D] text-white shadow-2xs"
+                  ? "bg-[#8F6B2A] text-white shadow-2xs"
                   : "text-[#5C5452] hover:bg-[#FAF8F5]"
               }`}
             >
@@ -718,7 +720,7 @@ export default function PosPage() {
               onClick={() => setActiveTab("history")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === "history"
-                  ? "bg-[#B85D4D] text-white shadow-2xs"
+                  ? "bg-[#8F6B2A] text-white shadow-2xs"
                   : "text-[#5C5452] hover:bg-[#FAF8F5]"
               }`}
             >
@@ -730,7 +732,7 @@ export default function PosPage() {
               onClick={() => setActiveTab("returns")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === "returns"
-                  ? "bg-[#B85D4D] text-white shadow-2xs"
+                  ? "bg-[#8F6B2A] text-white shadow-2xs"
                   : "text-[#5C5452] hover:bg-[#FAF8F5]"
               }`}
             >
@@ -742,7 +744,7 @@ export default function PosPage() {
               onClick={() => setActiveTab("summary")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === "summary"
-                  ? "bg-[#B85D4D] text-white shadow-2xs"
+                  ? "bg-[#8F6B2A] text-white shadow-2xs"
                   : "text-[#5C5452] hover:bg-[#FAF8F5]"
               }`}
             >
@@ -801,7 +803,7 @@ export default function PosPage() {
 
           {/* Cashier Badge */}
           <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-[#EAE5DD]">
-            <div className="w-7 h-7 rounded-full bg-[#E8998D]/20 text-[#B85D4D] flex items-center justify-center font-bold text-xs uppercase">
+            <div className="w-7 h-7 rounded-full bg-[#C5A059]/20 text-[#8F6B2A] flex items-center justify-center font-bold text-xs uppercase">
               {currentUser?.name?.[0] || "C"}
             </div>
             <div className="text-left text-xs leading-none">
@@ -838,11 +840,11 @@ export default function PosPage() {
                   placeholder="Scan barcode, enter SKU, or search item... (F2)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/60 focus:outline-none focus:ring-2 focus:ring-[#E8998D] text-[#1A1817] font-medium"
+                  className="w-full pl-10 pr-10 py-2.5 text-xs rounded-xl border border-[#E0D9D1] bg-[#FAF8F5]/60 focus:outline-none focus:ring-2 focus:ring-[#C5A059] text-[#1A1817] font-medium"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#8C827E] hover:text-[#B85D4D]"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#8C827E] hover:text-[#8F6B2A]"
                   title="Barcode scan submit"
                 >
                   <Barcode className="w-5 h-5" />
@@ -865,7 +867,7 @@ export default function PosPage() {
                 onClick={() => setSelectedCategory("all")}
                 className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
                   selectedCategory === "all"
-                    ? "bg-[#B85D4D] text-white shadow-2xs"
+                    ? "bg-[#8F6B2A] text-white shadow-2xs"
                     : "bg-white text-[#5C5452] border border-[#E0D9D1] hover:bg-[#F3EFEA]"
                 }`}
               >
@@ -877,7 +879,7 @@ export default function PosPage() {
                   onClick={() => setSelectedCategory(c.slug)}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
                     selectedCategory === c.slug
-                      ? "bg-[#B85D4D] text-white shadow-2xs"
+                      ? "bg-[#8F6B2A] text-white shadow-2xs"
                       : "bg-white text-[#5C5452] border border-[#E0D9D1] hover:bg-[#F3EFEA]"
                   }`}
                 >
@@ -898,7 +900,7 @@ export default function PosPage() {
                     <button
                       key={p.id}
                       onClick={() => addToCart(p)}
-                      className="bg-white rounded-xl border border-[#EAE5DD] p-2.5 text-left flex flex-col justify-between hover:border-[#B85D4D] hover:shadow-xs transition active:scale-[0.98] group relative"
+                      className="bg-white rounded-xl border border-[#EAE5DD] p-2.5 text-left flex flex-col justify-between hover:border-[#8F6B2A] hover:shadow-xs transition active:scale-[0.98] group relative"
                     >
                       {/* Image Thumbnail */}
                       <div className="w-full aspect-square rounded-lg bg-[#FAF5EF] overflow-hidden mb-2 relative">
@@ -909,8 +911,8 @@ export default function PosPage() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                         {p.discountType !== "NONE" && (
-                          <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#B85D4D] text-white">
-                            {p.discountType === "PERCENTAGE" ? `-${p.discountValue}%` : `-$${p.discountValue}`}
+                          <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#8F6B2A] text-white">
+                            {p.discountType === "PERCENTAGE" ? `-${p.discountValue}%` : `-${formatPrice(p.discountValue, currencySymbol)}`}
                           </span>
                         )}
                         <span
@@ -939,9 +941,9 @@ export default function PosPage() {
                       {/* Price */}
                       <div className="mt-2 pt-2 border-t border-[#F0EBE4] flex items-center justify-between">
                         <span className="font-serif font-bold text-sm text-[#1A1817]">
-                          ${Number(p.sellingPrice).toFixed(2)}
+                          {formatPrice(p.sellingPrice, currencySymbol)}
                         </span>
-                        <div className="w-6 h-6 rounded-md bg-[#FAF5EF] text-[#B85D4D] flex items-center justify-center group-hover:bg-[#B85D4D] group-hover:text-white transition">
+                        <div className="w-6 h-6 rounded-md bg-[#FAF5EF] text-[#8F6B2A] flex items-center justify-center group-hover:bg-[#8F6B2A] group-hover:text-white transition">
                           <Plus className="w-3.5 h-3.5" />
                         </div>
                       </div>
@@ -977,7 +979,7 @@ export default function PosPage() {
               {/* Customer Selector Ribbon */}
               <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-[#E0D9D1]">
                 <div className="flex items-center gap-2 overflow-hidden">
-                  <User className="w-4 h-4 text-[#B85D4D] flex-shrink-0" />
+                  <User className="w-4 h-4 text-[#8F6B2A] flex-shrink-0" />
                   <div className="truncate text-xs">
                     {selectedCustomer ? (
                       <>
@@ -1005,7 +1007,7 @@ export default function PosPage() {
                   )}
                   <button
                     onClick={() => setIsCustomerModalOpen(true)}
-                    className="px-2 py-1 text-[11px] font-semibold rounded-lg bg-[#FAF5EF] text-[#B85D4D] hover:bg-[#F0EBE4]"
+                    className="px-2 py-1 text-[11px] font-semibold rounded-lg bg-[#FAF5EF] text-[#8F6B2A] hover:bg-[#F0EBE4]"
                   >
                     {selectedCustomer ? "Change" : "+ Customer"}
                   </button>
@@ -1023,10 +1025,10 @@ export default function PosPage() {
                       <div className="flex-1 pr-2">
                         <p className="font-semibold text-[#1A1817] line-clamp-1">{item.product.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-[#756C6A]">${item.unitPrice.toFixed(2)} each</span>
+                          <span className="text-[10px] text-[#756C6A]">{formatPrice(item.unitPrice, currencySymbol)} each</span>
                           {item.lineDiscount > 0 && (
-                            <span className="text-[10px] text-[#B85D4D]">
-                              -${(item.lineDiscount * item.quantity).toFixed(2)} off
+                            <span className="text-[10px] text-[#8F6B2A]">
+                              -{formatPrice(item.lineDiscount * item.quantity, currencySymbol)} off
                             </span>
                           )}
                         </div>
@@ -1057,7 +1059,7 @@ export default function PosPage() {
                       {/* Line Total & Remove */}
                       <div className="text-right pl-2 flex items-center gap-2">
                         <span className="font-bold text-[#1A1817] w-14">
-                          ${lineTotal.toFixed(2)}
+                          {formatPrice(lineTotal, currencySymbol)}
                         </span>
                         <button
                           onClick={() => removeFromCart(idx)}
@@ -1084,27 +1086,27 @@ export default function PosPage() {
             <div className="p-4 bg-[#FAF8F5] border-t border-[#EAE5DD] space-y-2 text-xs">
               <div className="flex justify-between text-[#756C6A]">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatPrice(subtotal, currencySymbol)}</span>
               </div>
 
               {calculatedDiscount > 0 && (
-                <div className="flex justify-between text-[#B85D4D] font-medium">
+                <div className="flex justify-between text-[#8F6B2A] font-medium">
                   <span>Cart Discount</span>
-                  <span>-${calculatedDiscount.toFixed(2)}</span>
+                  <span>-{formatPrice(calculatedDiscount, currencySymbol)}</span>
                 </div>
               )}
 
               {taxRate > 0 && (
                 <div className="flex justify-between text-[#756C6A]">
                   <span>Tax ({storeSettings?.taxPercentage}%)</span>
-                  <span>${taxAmount.toFixed(2)}</span>
+                  <span>{formatPrice(taxAmount, currencySymbol)}</span>
                 </div>
               )}
 
               <div className="pt-2 border-t border-[#EAE5DD] flex justify-between items-baseline">
                 <span className="font-serif font-bold text-sm text-[#1A1817]">Grand Total</span>
-                <span className="font-serif font-bold text-xl text-[#B85D4D]">
-                  ${grandTotal.toFixed(2)}
+                <span className="font-serif font-bold text-xl text-[#8F6B2A]">
+                  {formatPrice(grandTotal, currencySymbol)}
                 </span>
               </div>
 
@@ -1134,7 +1136,7 @@ export default function PosPage() {
                 type="button"
                 onClick={openCheckout}
                 disabled={cart.length === 0}
-                className="w-full mt-1 py-3 px-4 rounded-xl bg-[#B85D4D] hover:bg-[#A04E40] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition disabled:opacity-40 active:scale-[0.99]"
+                className="w-full mt-1 py-3 px-4 rounded-xl bg-[#8F6B2A] hover:bg-[#755518] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition disabled:opacity-40 active:scale-[0.99]"
               >
                 <span>Pay / Checkout (F10)</span>
                 <ArrowRight className="w-4 h-4" />
@@ -1187,7 +1189,7 @@ export default function PosPage() {
                       </td>
                       <td className="py-3 px-3 text-[#5C5452]">{s.items?.length || 0} items</td>
                       <td className="py-3 px-3 text-right font-bold text-[#1A1817]">
-                        ${Number(s.grandTotal).toFixed(2)}
+                        {formatPrice(s.grandTotal, currencySymbol)}
                       </td>
                       <td className="py-3 px-4 text-right">
                         <button
@@ -1198,7 +1200,7 @@ export default function PosPage() {
                           }}
                           className="px-3 py-1 rounded-lg border border-[#E0D9D1] text-[#5C5452] hover:bg-[#FAF8F5] text-xs font-semibold inline-flex items-center gap-1"
                         >
-                          <Printer className="w-3.5 h-3.5 text-[#B85D4D]" />
+                          <Printer className="w-3.5 h-3.5 text-[#8F6B2A]" />
                           Reprint / WhatsApp
                         </button>
                       </td>
@@ -1238,7 +1240,7 @@ export default function PosPage() {
               <button
                 type="button"
                 onClick={() => alert("Invoice lookup: Returns can be performed directly on confirmed invoice records.")}
-                className="px-4 py-2 bg-[#B85D4D] text-white rounded-xl font-semibold"
+                className="px-4 py-2 bg-[#8F6B2A] text-white rounded-xl font-semibold"
               >
                 Lookup Invoice
               </button>
@@ -1259,7 +1261,7 @@ export default function PosPage() {
             <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-xs">
               <span className="text-xs text-[#756C6A] uppercase font-semibold">Total Revenue</span>
               <p className="text-2xl font-serif font-bold text-emerald-700 mt-2">
-                ${pastSales.reduce((a, b) => a + Number(b.grandTotal), 0).toFixed(2)}
+                {formatPrice(pastSales.reduce((a, b) => a + Number(b.grandTotal), 0), currencySymbol)}
               </p>
             </div>
             <div className="p-5 rounded-2xl bg-white border border-[#EAE5DD] shadow-xs">
@@ -1294,10 +1296,10 @@ export default function PosPage() {
             )}
 
             {/* Total Display */}
-            <div className="mt-4 p-4 rounded-2xl bg-[#FAF5EF] border border-[#E8998D]/30 text-center">
+            <div className="mt-4 p-4 rounded-2xl bg-[#FAF5EF] border border-[#C5A059]/30 text-center">
               <span className="text-xs text-[#756C6A] uppercase font-semibold">Grand Total Due</span>
-              <p className="text-3xl font-serif font-bold text-[#B85D4D] mt-1">
-                ${grandTotal.toFixed(2)}
+              <p className="text-3xl font-serif font-bold text-[#8F6B2A] mt-1">
+                {formatPrice(grandTotal, currencySymbol)}
               </p>
             </div>
 
@@ -1308,7 +1310,7 @@ export default function PosPage() {
                 onClick={() => setPaymentMethod("CASH")}
                 className={`py-2.5 px-3 rounded-xl border flex flex-col items-center gap-1 font-bold transition ${
                   paymentMethod === "CASH"
-                    ? "bg-[#B85D4D] text-white border-[#B85D4D]"
+                    ? "bg-[#8F6B2A] text-white border-[#8F6B2A]"
                     : "bg-white text-[#5C5452] border-[#E0D9D1] hover:bg-[#FAF8F5]"
                 }`}
               >
@@ -1320,7 +1322,7 @@ export default function PosPage() {
                 onClick={() => setPaymentMethod("CARD")}
                 className={`py-2.5 px-3 rounded-xl border flex flex-col items-center gap-1 font-bold transition ${
                   paymentMethod === "CARD"
-                    ? "bg-[#B85D4D] text-white border-[#B85D4D]"
+                    ? "bg-[#8F6B2A] text-white border-[#8F6B2A]"
                     : "bg-white text-[#5C5452] border-[#E0D9D1] hover:bg-[#FAF8F5]"
                 }`}
               >
@@ -1332,7 +1334,7 @@ export default function PosPage() {
                 onClick={() => setPaymentMethod("SPLIT")}
                 className={`py-2.5 px-3 rounded-xl border flex flex-col items-center gap-1 font-bold transition ${
                   paymentMethod === "SPLIT"
-                    ? "bg-[#B85D4D] text-white border-[#B85D4D]"
+                    ? "bg-[#8F6B2A] text-white border-[#8F6B2A]"
                     : "bg-white text-[#5C5452] border-[#E0D9D1] hover:bg-[#FAF8F5]"
                 }`}
               >
@@ -1345,7 +1347,7 @@ export default function PosPage() {
             {paymentMethod === "CASH" && (
               <div className="mt-4 space-y-3">
                 <div>
-                  <label className="block font-semibold text-[#5C5452] mb-1">Cash Tendered ($)</label>
+                  <label className="block font-semibold text-[#5C5452] mb-1">Cash Tendered ({currencySymbol})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -1364,13 +1366,13 @@ export default function PosPage() {
                       onClick={() => setCashTendered(amt)}
                       className="py-1.5 rounded-lg border border-[#E0D9D1] bg-[#FAF8F5] font-bold text-[#1A1817] hover:bg-[#F0EBE4]"
                     >
-                      ${amt}
+                      {currencySymbol} {amt}
                     </button>
                   ))}
                   <button
                     type="button"
                     onClick={() => setCashTendered(grandTotal)}
-                    className="py-1.5 rounded-lg border border-[#E0D9D1] bg-[#FAF8F5] font-bold text-[#B85D4D] hover:bg-[#F0EBE4]"
+                    className="py-1.5 rounded-lg border border-[#E0D9D1] bg-[#FAF8F5] font-bold text-[#8F6B2A] hover:bg-[#F0EBE4]"
                   >
                     Exact
                   </button>
@@ -1379,7 +1381,7 @@ export default function PosPage() {
                 <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#EAE5DD] flex items-center justify-between">
                   <span className="font-semibold text-[#5C5452]">Change Due to Customer:</span>
                   <span className="font-serif font-bold text-base text-emerald-700">
-                    ${Math.max(0, cashTendered - grandTotal).toFixed(2)}
+                    {formatPrice(Math.max(0, cashTendered - grandTotal), currencySymbol)}
                   </span>
                 </div>
               </div>
@@ -1417,7 +1419,7 @@ export default function PosPage() {
               <div className="mt-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-semibold text-[#5C5452] mb-1">Cash Component ($)</label>
+                    <label className="block font-semibold text-[#5C5452] mb-1">Cash Component ({currencySymbol})</label>
                     <input
                       type="number"
                       step="0.01"
@@ -1427,7 +1429,7 @@ export default function PosPage() {
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-[#5C5452] mb-1">Card Component ($)</label>
+                    <label className="block font-semibold text-[#5C5452] mb-1">Card Component ({currencySymbol})</label>
                     <input
                       type="number"
                       step="0.01"
@@ -1439,7 +1441,7 @@ export default function PosPage() {
                 </div>
                 <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-center">
                   <span className="text-[11px] text-[#756C6A]">
-                    Reconciled: ${(splitCash + splitCard).toFixed(2)} of ${grandTotal.toFixed(2)}
+                    Reconciled: {formatPrice(splitCash + splitCard, currencySymbol)} of {formatPrice(grandTotal, currencySymbol)}
                   </span>
                 </div>
               </div>
@@ -1452,7 +1454,7 @@ export default function PosPage() {
                 type="text"
                 value={checkoutNotes}
                 onChange={(e) => setCheckoutNotes(e.target.value)}
-                placeholder="e.g. Gift wrapped with silk ribbon"
+                placeholder="e.g. Custom décor arrangement with ribbon"
                 className="w-full px-3 py-1.5 rounded-xl border border-[#E0D9D1] outline-none"
               />
             </div>
@@ -1469,7 +1471,7 @@ export default function PosPage() {
                 type="button"
                 onClick={handleCompleteCheckout}
                 disabled={checkoutLoading}
-                className="px-6 py-2.5 rounded-xl bg-[#B85D4D] text-white font-bold hover:bg-[#A04E40] transition disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-[#8F6B2A] text-white font-bold hover:bg-[#755518] transition disabled:opacity-50"
               >
                 {checkoutLoading ? "Processing Sale..." : "Confirm & Print Receipt"}
               </button>
@@ -1497,7 +1499,7 @@ export default function PosPage() {
               <div id="printable-receipt" className="space-y-2">
                 <div className="text-center pb-2 border-b border-dashed border-[#A89F91]">
                   <h4 className="font-serif font-bold text-sm tracking-wider uppercase">
-                    {storeSettings?.shopName || "Zentravo Luxury Gifts"}
+                    {storeSettings?.shopName || "Oak Bloom"}
                   </h4>
                   <p className="text-[10px] text-[#756C6A]">{storeSettings?.address}</p>
                   <p className="text-[10px] text-[#756C6A]">Tel: {storeSettings?.phone}</p>
@@ -1531,7 +1533,7 @@ export default function PosPage() {
                       <span className="truncate max-w-[180px]">
                         {it.product?.name || it.productName || "Item"} x{it.quantity}
                       </span>
-                      <span>${Number(it.lineTotal).toFixed(2)}</span>
+                      <span>{formatPrice(it.lineTotal, currencySymbol)}</span>
                     </div>
                   ))}
                 </div>
@@ -1539,28 +1541,28 @@ export default function PosPage() {
                 <div className="space-y-1 text-[10px] pt-1">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
-                    <span>${Number(completedSale.subtotal).toFixed(2)}</span>
+                    <span>{formatPrice(completedSale.subtotal, currencySymbol)}</span>
                   </div>
                   {Number(completedSale.cartDiscount) > 0 && (
-                    <div className="flex justify-between text-[#B85D4D]">
+                    <div className="flex justify-between text-[#8F6B2A]">
                       <span>Discount:</span>
-                      <span>-${Number(completedSale.cartDiscount).toFixed(2)}</span>
+                      <span>-{formatPrice(completedSale.cartDiscount, currencySymbol)}</span>
                     </div>
                   )}
                   {Number(completedSale.taxAmount) > 0 && (
                     <div className="flex justify-between">
                       <span>Tax:</span>
-                      <span>${Number(completedSale.taxAmount).toFixed(2)}</span>
+                      <span>{formatPrice(completedSale.taxAmount, currencySymbol)}</span>
                     </div>
                   )}
                   <div className="flex justify-between font-bold text-xs pt-1 border-t border-[#A89F91]">
                     <span>Total Paid:</span>
-                    <span>${Number(completedSale.grandTotal).toFixed(2)}</span>
+                    <span>{formatPrice(completedSale.grandTotal, currencySymbol)}</span>
                   </div>
                   {completedSale.changeAmount > 0 && (
                     <div className="flex justify-between">
                       <span>Change:</span>
-                      <span>${Number(completedSale.changeAmount).toFixed(2)}</span>
+                      <span>{formatPrice(completedSale.changeAmount, currencySymbol)}</span>
                     </div>
                   )}
                 </div>
@@ -1578,7 +1580,7 @@ export default function PosPage() {
                 onClick={() => window.print()}
                 className="py-2.5 px-3 rounded-xl border border-[#E0D9D1] bg-white hover:bg-[#FAF8F5] font-semibold text-[#1A1817] flex items-center justify-center gap-1.5 shadow-2xs"
               >
-                <Printer className="w-4 h-4 text-[#B85D4D]" />
+                <Printer className="w-4 h-4 text-[#8F6B2A]" />
                 <span>Print 80mm Receipt</span>
               </button>
               <button
@@ -1586,7 +1588,7 @@ export default function PosPage() {
                 onClick={() => window.print()}
                 className="py-2.5 px-3 rounded-xl border border-[#E0D9D1] bg-white hover:bg-[#FAF8F5] font-semibold text-[#1A1817] flex items-center justify-center gap-1.5 shadow-2xs"
               >
-                <Printer className="w-4 h-4 text-[#B85D4D]" />
+                <Printer className="w-4 h-4 text-[#8F6B2A]" />
                 <span>Print A4 Invoice</span>
               </button>
             </div>
@@ -1619,7 +1621,7 @@ export default function PosPage() {
               <button
                 type="button"
                 onClick={() => setIsReceiptOpen(false)}
-                className="px-6 py-2 rounded-xl bg-[#B85D4D] text-white font-bold hover:bg-[#A04E40]"
+                className="px-6 py-2 rounded-xl bg-[#8F6B2A] text-white font-bold hover:bg-[#755518]"
               >
                 Done / Next Sale
               </button>
@@ -1648,7 +1650,7 @@ export default function PosPage() {
                     setSelectedCustomer(c);
                     setIsCustomerModalOpen(false);
                   }}
-                  className="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DD] hover:border-[#B85D4D] flex items-center justify-between text-left transition"
+                  className="w-full p-2.5 rounded-xl bg-[#FAF8F5] border border-[#EAE5DD] hover:border-[#8F6B2A] flex items-center justify-between text-left transition"
                 >
                   <div>
                     <span className="font-bold text-[#1A1817] block">{c.name}</span>
@@ -1681,7 +1683,7 @@ export default function PosPage() {
               />
               <button
                 type="submit"
-                className="w-full py-2 rounded-xl bg-[#B85D4D] text-white font-semibold hover:bg-[#A04E40]"
+                className="w-full py-2 rounded-xl bg-[#8F6B2A] text-white font-semibold hover:bg-[#755518]"
               >
                 Create & Attach Customer
               </button>
@@ -1708,7 +1710,7 @@ export default function PosPage() {
                   onClick={() => setCartDiscountType("FIXED")}
                   className={`py-2 rounded-xl font-bold border transition ${
                     cartDiscountType === "FIXED"
-                      ? "bg-[#B85D4D] text-white border-[#B85D4D]"
+                      ? "bg-[#8F6B2A] text-white border-[#8F6B2A]"
                       : "bg-[#FAF8F5] text-[#5C5452] border-[#E0D9D1]"
                   }`}
                 >
@@ -1719,7 +1721,7 @@ export default function PosPage() {
                   onClick={() => setCartDiscountType("PERCENTAGE")}
                   className={`py-2 rounded-xl font-bold border transition ${
                     cartDiscountType === "PERCENTAGE"
-                      ? "bg-[#B85D4D] text-white border-[#B85D4D]"
+                      ? "bg-[#8F6B2A] text-white border-[#8F6B2A]"
                       : "bg-[#FAF8F5] text-[#5C5452] border-[#E0D9D1]"
                   }`}
                 >
@@ -1741,7 +1743,7 @@ export default function PosPage() {
               <button
                 type="button"
                 onClick={() => setIsDiscountModalOpen(false)}
-                className="w-full py-2.5 rounded-xl bg-[#B85D4D] text-white font-bold hover:bg-[#A04E40]"
+                className="w-full py-2.5 rounded-xl bg-[#8F6B2A] text-white font-bold hover:bg-[#755518]"
               >
                 Apply to Cart
               </button>
@@ -1772,7 +1774,7 @@ export default function PosPage() {
                   </div>
                   <button
                     onClick={() => resumeBill(h)}
-                    className="px-3 py-1.5 rounded-lg bg-[#B85D4D] text-white font-semibold hover:bg-[#A04E40]"
+                    className="px-3 py-1.5 rounded-lg bg-[#8F6B2A] text-white font-semibold hover:bg-[#755518]"
                   >
                     Resume Bill
                   </button>

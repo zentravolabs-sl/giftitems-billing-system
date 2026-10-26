@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, Package, Gift, LogOut, ArrowRight, Clock, Star, Phone, Mail } from "lucide-react";
+import { User, Package, LogOut, ArrowRight, Clock, Star, Phone, Mail } from "lucide-react";
 import { WebsiteHeader } from "@/components/website-header";
 import { WebsiteFooter } from "@/components/website-footer";
 import { CartProvider } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -56,11 +57,11 @@ export default function AccountPage() {
           {/* Account Profile Header */}
           <div className="bg-white rounded-3xl border border-[#EAE5DD] shadow-xs p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#FAF5EF] border border-[#E8998D]/40 text-[#B85D4D] flex items-center justify-center font-bold text-xl uppercase font-serif">
+              <div className="w-16 h-16 rounded-full bg-[#FAF5EF] border border-[#C5A059]/40 text-[#8F6B2A] flex items-center justify-center font-bold text-xl uppercase font-serif">
                 {user?.name?.[0] || "U"}
               </div>
               <div>
-                <span className="text-[10px] font-bold text-[#B85D4D] uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-[#8F6B2A] uppercase tracking-wider block">
                   Boutique Member
                 </span>
                 <h1 className="font-serif text-2xl font-bold text-[#1A1817]">{user?.name}</h1>
@@ -69,10 +70,10 @@ export default function AccountPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="px-4 py-2 rounded-2xl bg-[#FAF5EF] border border-[#E8998D]/30 text-right">
+              <div className="px-4 py-2 rounded-2xl bg-[#FAF5EF] border border-[#C5A059]/30 text-right">
                 <span className="text-[10px] text-[#756C6A] block">Loyalty Points</span>
-                <span className="font-serif font-bold text-lg text-[#B85D4D] flex items-center gap-1 justify-end">
-                  <Star className="w-3.5 h-3.5 fill-[#B85D4D]" />
+                <span className="font-serif font-bold text-lg text-[#8F6B2A] flex items-center gap-1 justify-end">
+                  <Star className="w-3.5 h-3.5 fill-[#8F6B2A]" />
                   {orders.reduce((acc, o) => acc + Math.floor(Number(o.grandTotal)), 0)} pts
                 </span>
               </div>
@@ -91,7 +92,7 @@ export default function AccountPage() {
           {/* Orders Section */}
           <div className="space-y-4">
             <h2 className="font-serif font-bold text-xl text-[#1A1817] flex items-center gap-2">
-              <Package className="w-5 h-5 text-[#B85D4D]" />
+              <Package className="w-5 h-5 text-[#8F6B2A]" />
               Your Order History ({orders.length})
             </h2>
 
@@ -121,11 +122,11 @@ export default function AccountPage() {
 
                     <div className="flex items-center gap-4">
                       <span className="font-serif font-bold text-base text-[#1A1817]">
-                        ${Number(o.grandTotal).toFixed(2)}
+                        {formatPrice(o.grandTotal)}
                       </span>
                       <Link
                         href={`/orders/${o.orderNumber}`}
-                        className="px-4 py-2 rounded-xl bg-[#FAF5EF] text-[#B85D4D] hover:bg-[#F0EBE4] font-semibold text-xs inline-flex items-center gap-1.5 transition"
+                        className="px-4 py-2 rounded-xl bg-[#FAF5EF] text-[#8F6B2A] hover:bg-[#F0EBE4] font-semibold text-xs inline-flex items-center gap-1.5 transition"
                       >
                         <span>Track Status</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -136,15 +137,15 @@ export default function AccountPage() {
               </div>
             ) : (
               <div className="p-12 text-center bg-white rounded-3xl border border-[#EAE5DD] space-y-3">
-                <Gift className="w-8 h-8 text-[#B85D4D] mx-auto opacity-40" />
+                <Package className="w-8 h-8 text-[#8F6B2A] mx-auto opacity-40" />
                 <h3 className="font-serif font-bold text-base text-[#1A1817]">No orders placed yet</h3>
                 <p className="text-xs text-[#756C6A]">
-                  When you purchase gifts or keepsake trunks, your tracking and digital receipts will appear here.
+                  When you purchase lights, flowers, or décor items, your tracking and digital receipts will appear here.
                 </p>
                 <div className="pt-2">
                   <Link
                     href="/shop"
-                    className="px-5 py-2.5 rounded-xl bg-[#B85D4D] text-white font-semibold text-xs inline-flex items-center gap-1.5"
+                    className="px-5 py-2.5 rounded-xl bg-[#8F6B2A] text-white font-semibold text-xs inline-flex items-center gap-1.5"
                   >
                     <span>Explore Boutique</span>
                     <ArrowRight className="w-3.5 h-3.5" />

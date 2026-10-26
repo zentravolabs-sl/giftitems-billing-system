@@ -12,11 +12,12 @@ import {
   Tag,
   CheckCircle2,
   AlertCircle,
-  Gift,
+  ShieldCheck,
 } from "lucide-react";
 import { WebsiteHeader } from "@/components/website-header";
 import { WebsiteFooter } from "@/components/website-footer";
 import { useCart, CartProvider } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 
 function CartPageInner() {
   const {
@@ -58,7 +59,7 @@ function CartPageInner() {
         <div className="mb-8">
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#B85D4D] font-medium mb-3 transition"
+            className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#8F6B2A] font-medium mb-3 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Continue Shopping</span>
@@ -94,12 +95,12 @@ function CartPageInner() {
                         <span className="text-[10px] text-[#8C827E] font-mono">{item.product.sku}</span>
                         <Link
                           href={`/product/${item.product.slug}`}
-                          className="font-serif font-bold text-sm text-[#1A1817] hover:text-[#B85D4D] block line-clamp-1 transition"
+                          className="font-serif font-bold text-sm text-[#1A1817] hover:text-[#8F6B2A] block line-clamp-1 transition"
                         >
                           {item.product.name}
                         </Link>
                         <p className="text-[#756C6A] mt-1 font-semibold">
-                          ${linePrice.toFixed(2)} each
+                          {formatPrice(linePrice)} each
                         </p>
                       </div>
 
@@ -127,7 +128,7 @@ function CartPageInner() {
                       {/* Line Total & Remove */}
                       <div className="text-right pl-3 flex flex-col items-end gap-2 w-20">
                         <span className="font-serif font-bold text-sm text-[#1A1817]">
-                          ${lineTotal.toFixed(2)}
+                          {formatPrice(lineTotal)}
                         </span>
                         <button
                           type="button"
@@ -143,11 +144,11 @@ function CartPageInner() {
                 })}
               </div>
 
-              {/* Complimentary gift wrapping notice */}
-              <div className="p-4 rounded-2xl bg-[#FAF5EF] border border-[#E8998D]/30 flex items-center gap-3 text-xs">
-                <Gift className="w-5 h-5 text-[#B85D4D] flex-shrink-0" />
+              {/* Protective artisanal packaging notice */}
+              <div className="p-4 rounded-2xl bg-[#FAF5EF] border border-[#C5A059]/30 flex items-center gap-3 text-xs">
+                <ShieldCheck className="w-5 h-5 text-[#8F6B2A] flex-shrink-0" />
                 <p className="text-[#5C5452]">
-                  <strong className="text-[#1A1817]">Complimentary Gift Box & Card:</strong> Every item is packed in our signature embossed luxury box with hand-scribed calligraphy note included free of charge.
+                  <strong className="text-[#1A1817]">Protective Handcrafted Packaging:</strong> Every light, faux floral arrangement, and home accent is safely cushioned with eco-friendly protective materials.
                 </p>
               </div>
             </div>
@@ -165,7 +166,7 @@ function CartPageInner() {
                       placeholder="Coupon Code (e.g. GIFT2026)"
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
-                      className="flex-1 px-3 py-2 rounded-xl border border-[#E0D9D1] uppercase font-mono text-xs outline-none focus:ring-2 focus:ring-[#E8998D]"
+                      className="flex-1 px-3 py-2 rounded-xl border border-[#E0D9D1] uppercase font-mono text-xs outline-none focus:ring-2 focus:ring-[#C5A059]"
                     />
                     <button
                       type="submit"
@@ -205,13 +206,13 @@ function CartPageInner() {
                 <div className="pt-3 border-t border-[#F0EBE4] space-y-2">
                   <div className="flex justify-between text-[#756C6A]">
                     <span>Items Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>{formatPrice(subtotal)}</span>
                   </div>
 
                   {discountTotal > 0 && (
-                    <div className="flex justify-between text-[#B85D4D] font-semibold">
+                    <div className="flex justify-between text-[#8F6B2A] font-semibold">
                       <span>Coupon Savings</span>
-                      <span>-${discountTotal.toFixed(2)}</span>
+                      <span>-{formatPrice(discountTotal)}</span>
                     </div>
                   )}
 
@@ -221,28 +222,28 @@ function CartPageInner() {
                       {deliveryFee === 0 ? (
                         <span className="text-emerald-700 font-bold">Complimentary</span>
                       ) : (
-                        `$${deliveryFee.toFixed(2)}`
+                        formatPrice(deliveryFee)
                       )}
                     </span>
                   </div>
 
                   {subtotal < 75 && (
                     <p className="text-[10px] text-[#8C827E]">
-                      Add ${(75 - subtotal).toFixed(2)} more for complimentary delivery!
+                      Add {formatPrice(75 - subtotal)} more for complimentary delivery!
                     </p>
                   )}
 
                   <div className="pt-3 border-t border-[#EAE5DD] flex justify-between items-baseline font-bold">
                     <span className="font-serif text-base text-[#1A1817]">Grand Total</span>
-                    <span className="font-serif text-2xl text-[#B85D4D]">
-                      ${finalTotal.toFixed(2)}
+                    <span className="font-serif text-2xl text-[#8F6B2A]">
+                      {formatPrice(finalTotal)}
                     </span>
                   </div>
                 </div>
 
                 <Link
                   href="/checkout"
-                  className="w-full py-3.5 px-6 rounded-xl bg-[#B85D4D] hover:bg-[#A04E40] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.99] block text-center"
+                  className="w-full py-3.5 px-6 rounded-xl bg-[#8F6B2A] hover:bg-[#755518] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition active:scale-[0.99] block text-center"
                 >
                   <span>Proceed to Checkout</span>
                   <ArrowRight className="w-4 h-4" />
@@ -252,17 +253,17 @@ function CartPageInner() {
           </div>
         ) : (
           <div className="py-24 text-center text-[#8C827E] bg-white rounded-3xl border border-[#EAE5DD] max-w-lg mx-auto p-8">
-            <ShoppingBag className="w-12 h-12 mx-auto mb-3 text-[#B85D4D] opacity-40" />
+            <ShoppingBag className="w-12 h-12 mx-auto mb-3 text-[#8F6B2A] opacity-40" />
             <h2 className="font-serif font-bold text-xl text-[#1A1817]">Your Bag is Currently Empty</h2>
             <p className="text-xs text-[#756C6A] mt-1 max-w-xs mx-auto">
-              Explore our boutique selections to discover hand-poured candles, gift hampers, and timeless keepsakes.
+              Explore our collection of handcrafted wooden lights, artificial flowers, and elegant home décor pieces.
             </p>
             <div className="mt-6">
               <Link
                 href="/shop"
-                className="px-6 py-3 rounded-xl bg-[#B85D4D] text-white font-semibold text-xs inline-flex items-center gap-2"
+                className="px-6 py-3 rounded-xl bg-[#8F6B2A] text-white font-semibold text-xs inline-flex items-center gap-2"
               >
-                <span>Browse Gift Collections</span>
+                <span>Browse All Collections</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

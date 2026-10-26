@@ -40,7 +40,7 @@ export default async function CategoryDetailPage({
           {/* Breadcrumb / Back button */}
           <Link
             href="/categories"
-            className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#B85D4D] font-medium mb-6 transition"
+            className="inline-flex items-center gap-1.5 text-xs text-[#756C6A] hover:text-[#8F6B2A] font-medium mb-6 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>All Categories</span>
@@ -49,7 +49,7 @@ export default async function CategoryDetailPage({
           {/* Category Banner */}
           <div className="rounded-3xl bg-white border border-[#EAE5DD] p-8 mb-10 flex flex-col md:flex-row items-center gap-8 shadow-xs">
             <div className="flex-1 space-y-3">
-              <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#B85D4D] border border-[#E8998D]/40">
+              <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#8F6B2A] border border-[#C5A059]/40">
                 Collection
               </span>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">

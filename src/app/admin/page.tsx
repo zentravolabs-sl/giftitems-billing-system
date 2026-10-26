@@ -15,6 +15,7 @@ import {
   Clock,
   Sparkles,
 } from "lucide-react";
+import { formatPrice } from "@/lib/currency";
 
 interface DashboardData {
   metrics: {
@@ -80,7 +81,7 @@ export default function AdminDashboardPage() {
           </button>
           <Link
             href="/pos"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#B85D4D] text-white hover:bg-[#A04E40] shadow-xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#8F6B2A] text-white hover:bg-[#755518] shadow-xs transition"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
             Open POS Register
@@ -102,7 +103,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="mt-3">
             <p className="text-2xl font-serif font-bold text-[#1A1817]">
-              ${data?.metrics.todaySales.toFixed(2) || "0.00"}
+              {formatPrice(data?.metrics.todaySales)}
             </p>
             <p className="text-[11px] text-[#756C6A] mt-1">
               {data?.metrics.todayOrdersCount || 0} completed invoices today
@@ -122,7 +123,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="mt-3">
             <p className="text-2xl font-serif font-bold text-[#1A1817]">
-              ${data?.metrics.monthSales.toFixed(2) || "0.00"}
+              {formatPrice(data?.metrics.monthSales)}
             </p>
             <p className="text-[11px] text-[#756C6A] mt-1">
               {data?.metrics.monthOrdersCount || 0} bills this month
@@ -142,7 +143,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="mt-3">
             <p className="text-2xl font-serif font-bold text-[#1A1817]">
-              ${data?.metrics.grossProfit.toFixed(2) || "0.00"}
+              {formatPrice(data?.metrics.grossProfit)}
             </p>
             <p className="text-[11px] text-[#756C6A] mt-1">
               Net Revenue minus COGS
@@ -156,13 +157,13 @@ export default function AdminDashboardPage() {
             <span className="text-xs font-semibold text-[#8C827E] uppercase tracking-wider">
               Inventory Value
             </span>
-            <div className="w-9 h-9 rounded-xl bg-[#E8998D]/20 text-[#B85D4D] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#C5A059]/20 text-[#8F6B2A] flex items-center justify-center">
               <Package className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3">
             <p className="text-2xl font-serif font-bold text-[#1A1817]">
-              ${data?.metrics.inventoryValuation.toFixed(2) || "0.00"}
+              {formatPrice(data?.metrics.inventoryValuation)}
             </p>
             <p className="text-[11px] text-[#756C6A] mt-1">
               At current weighted average cost
@@ -174,7 +175,7 @@ export default function AdminDashboardPage() {
       {/* Secondary Highlights Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-xl bg-white border border-[#EAE5DD] flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-rose-50 text-[#B85D4D] flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-rose-50 text-[#8F6B2A] flex items-center justify-center flex-shrink-0">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
@@ -204,7 +205,7 @@ export default function AdminDashboardPage() {
           <div>
             <span className="text-xs text-[#756C6A] block">Purchases This Month</span>
             <span className="font-bold text-sm text-[#1A1817]">
-              ${data?.metrics.monthPurchases.toFixed(2) || "0.00"}
+              {formatPrice(data?.metrics.monthPurchases)}
             </span>
           </div>
         </div>
@@ -221,7 +222,7 @@ export default function AdminDashboardPage() {
             </div>
             <Link
               href="/admin/reports"
-              className="text-xs font-semibold text-[#B85D4D] hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-[#8F6B2A] hover:underline flex items-center gap-1"
             >
               View All Invoices
               <ArrowRight className="w-3.5 h-3.5" />
@@ -261,7 +262,7 @@ export default function AdminDashboardPage() {
                       </td>
                       <td className="py-3 px-3 text-[#756C6A]">{sale.items?.length || 0} lines</td>
                       <td className="py-3 px-3 text-right font-bold text-[#1A1817]">
-                        ${Number(sale.grandTotal).toFixed(2)}
+                        {formatPrice(sale.grandTotal)}
                       </td>
                       <td className="py-3 px-3 text-right text-[#8C827E]">
                         {new Date(sale.createdAt).toLocaleTimeString([], {
@@ -292,7 +293,7 @@ export default function AdminDashboardPage() {
                 <AlertTriangle className="w-4 h-4 text-rose-500" />
                 Inventory Watchlist
               </h2>
-              <Link href="/admin/inventory" className="text-[11px] text-[#B85D4D] font-medium hover:underline">
+              <Link href="/admin/inventory" className="text-[11px] text-[#8F6B2A] font-medium hover:underline">
                 Manage Stock
               </Link>
             </div>
@@ -330,9 +331,9 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Quick Actions Card */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-[#FAF5EF] to-[#F5EBE1] border border-[#E8998D]/30 shadow-xs">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-[#FAF5EF] to-[#F5EBE1] border border-[#C5A059]/30 shadow-xs">
             <h3 className="font-serif font-bold text-sm text-[#1A1817] flex items-center gap-1.5 mb-2">
-              <Sparkles className="w-4 h-4 text-[#B85D4D]" />
+              <Sparkles className="w-4 h-4 text-[#8F6B2A]" />
               Quick Shop Management
             </h3>
             <p className="text-xs text-[#5C5452] mb-3">

@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
     const totalPayments = data.payments.reduce((acc, p) => acc + p.amount, 0);
     if (Math.abs(totalPayments - grandTotal) > 0.05 && totalPayments < grandTotal) {
       return NextResponse.json(
-        { error: `Payment total ($${totalPayments.toFixed(2)}) does not match bill grand total ($${grandTotal.toFixed(2)})` },
+        { error: `Payment total (Rs. ${totalPayments.toFixed(2)}) does not match bill grand total (Rs. ${grandTotal.toFixed(2)})` },
         { status: 400 }
       );
     }

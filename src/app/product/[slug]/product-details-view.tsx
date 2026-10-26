@@ -6,13 +6,14 @@ import {
   Check,
   Plus,
   Minus,
-  Gift,
+  Leaf,
   Truck,
   ShieldCheck,
   Heart,
   Share2,
 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 
 export function ProductDetailsView({ product }: { product: any }) {
   const { addToCart } = useCart();
@@ -36,7 +37,7 @@ export function ProductDetailsView({ product }: { product: any }) {
   } else if (product.discountType === "FIXED" && Number(product.discountValue) > 0) {
     hasDiscount = true;
     finalPrice = Math.max(0, regularPrice - Number(product.discountValue));
-    discountBadge = `Save $${product.discountValue}`;
+    discountBadge = `Save ${formatPrice(product.discountValue)}`;
   }
 
   const stockNum = Number(product.stockQuantity);
@@ -76,7 +77,7 @@ export function ProductDetailsView({ product }: { product: any }) {
             className="w-full h-full object-cover"
           />
           {hasDiscount && (
-            <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-[#B85D4D] text-white shadow-xs">
+            <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-[#8F6B2A] text-white shadow-xs">
               {discountBadge}
             </span>
           )}
@@ -91,7 +92,7 @@ export function ProductDetailsView({ product }: { product: any }) {
                 type="button"
                 onClick={() => setSelectedImageIndex(idx)}
                 className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition ${
-                  selectedImageIndex === idx ? "border-[#B85D4D] shadow-xs" : "border-[#EAE5DD] opacity-70 hover:opacity-100"
+                  selectedImageIndex === idx ? "border-[#8F6B2A] shadow-xs" : "border-[#EAE5DD] opacity-70 hover:opacity-100"
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -106,7 +107,7 @@ export function ProductDetailsView({ product }: { product: any }) {
       <div className="space-y-6">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#B85D4D] border border-[#E8998D]/40">
+            <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FAF5EF] text-[#8F6B2A] border border-[#C5A059]/40">
               {product.category?.name}
             </span>
             <span className="font-mono text-xs text-[#8C827E]">SKU: {product.sku}</span>
@@ -119,11 +120,11 @@ export function ProductDetailsView({ product }: { product: any }) {
           {/* Pricing */}
           <div className="mt-4 flex items-baseline gap-3">
             <span className="font-serif font-bold text-3xl text-[#1A1817]">
-              ${finalPrice.toFixed(2)}
+              {formatPrice(finalPrice)}
             </span>
             {hasDiscount && (
               <span className="text-lg text-[#8C827E] line-through font-serif">
-                ${regularPrice.toFixed(2)}
+                {formatPrice(regularPrice)}
               </span>
             )}
           </div>
@@ -194,7 +195,7 @@ export function ProductDetailsView({ product }: { product: any }) {
                   ? "bg-emerald-600 text-white"
                   : isOutOfStock
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-[#B85D4D] text-white hover:bg-[#A04E40]"
+                  : "bg-[#8F6B2A] text-white hover:bg-[#755518]"
               }`}
             >
               {added ? (
@@ -212,20 +213,20 @@ export function ProductDetailsView({ product }: { product: any }) {
           </div>
         </div>
 
-        {/* Concierge Promises */}
+        {/* Artisan Craft Promises */}
         <div className="pt-6 border-t border-[#EAE5DD] grid grid-cols-2 gap-4 text-xs text-[#756C6A]">
           <div className="flex items-start gap-2.5">
-            <Gift className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+            <Leaf className="w-4 h-4 text-[#5F6340] flex-shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold text-[#1A1817] block">Complimentary Card</span>
-              <span>Personalized wax-sealed card note</span>
+              <span className="font-bold text-[#1A1817] block">Handmade & Local</span>
+              <span>Crafted with sustainable natural materials</span>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
-            <Truck className="w-4 h-4 text-[#B85D4D] flex-shrink-0 mt-0.5" />
+            <Truck className="w-4 h-4 text-[#8F6B2A] flex-shrink-0 mt-0.5" />
             <div>
               <span className="font-bold text-[#1A1817] block">Express Courier</span>
-              <span>Tracked delivery direct to recipient</span>
+              <span>Protective cushioned packaging</span>
             </div>
           </div>
         </div>

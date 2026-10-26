@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ShoppingBag, Check, Eye, Star } from "lucide-react";
 import { useCart, CartProduct } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/currency";
 
 interface ProductCardProps {
   product: {
@@ -42,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
   } else if (product.discountType === "FIXED" && Number(product.discountValue) > 0) {
     hasDiscount = true;
     finalPrice = Math.max(0, regularPrice - Number(product.discountValue));
-    discountBadge = `-$${product.discountValue}`;
+    discountBadge = `-${formatPrice(product.discountValue)}`;
   }
 
   const stockNum = Number(product.stockQuantity);
@@ -70,7 +71,7 @@ export function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <div className="group bg-white rounded-2xl border border-[#EAE5DD] overflow-hidden flex flex-col justify-between hover:border-[#E8998D] hover:shadow-md transition-all duration-300">
+    <div className="group bg-white rounded-2xl border border-[#EAE5DD] overflow-hidden flex flex-col justify-between hover:border-[#C5A059] hover:shadow-md transition-all duration-300">
       {/* Image Container with Badges */}
       <Link href={`/product/${product.slug}`} className="relative aspect-square overflow-hidden bg-[#FAF5EF] block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -83,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Top Badges */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 items-start">
           {hasDiscount && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#B85D4D] text-white shadow-xs">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#8F6B2A] text-white shadow-xs">
               {discountBadge}
             </span>
           )}
@@ -115,11 +116,11 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="p-4 flex flex-col justify-between flex-1">
         <div>
           <div className="flex items-center justify-between text-[11px] text-[#8C827E] mb-1">
-            <span>{product.category?.name || "Boutique Gift"}</span>
+            <span>{product.category?.name || "Home Décor"}</span>
             <span className="font-mono text-[10px]">{product.sku}</span>
           </div>
 
-          <Link href={`/product/${product.slug}`} className="block group-hover:text-[#B85D4D] transition">
+          <Link href={`/product/${product.slug}`} className="block group-hover:text-[#8F6B2A] transition">
             <h3 className="font-serif font-bold text-sm text-[#1A1817] line-clamp-1 leading-snug">
               {product.name}
             </h3>
@@ -131,11 +132,11 @@ export function ProductCard({ product }: ProductCardProps) {
           <div>
             <div className="flex items-baseline gap-1.5">
               <span className="font-serif font-bold text-base text-[#1A1817]">
-                ${finalPrice.toFixed(2)}
+                {formatPrice(finalPrice)}
               </span>
               {hasDiscount && (
                 <span className="text-xs text-[#8C827E] line-through">
-                  ${regularPrice.toFixed(2)}
+                  {formatPrice(regularPrice)}
                 </span>
               )}
             </div>
@@ -150,7 +151,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 ? "bg-emerald-600 text-white"
                 : isOutOfStock
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-[#FAF5EF] text-[#B85D4D] hover:bg-[#B85D4D] hover:text-white"
+                : "bg-[#FAF5EF] text-[#8F6B2A] hover:bg-[#8F6B2A] hover:text-white"
             }`}
             title={isOutOfStock ? "Out of Stock" : "Add to Shopping Cart"}
           >

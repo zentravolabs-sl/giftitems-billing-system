@@ -16,7 +16,7 @@ export default async function PrivacyPage() {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full flex-1 space-y-8">
           <div className="text-center max-w-xl mx-auto">
-            <span className="text-xs font-semibold text-[#B85D4D] uppercase tracking-wider block mb-1">
+            <span className="text-xs font-semibold text-[#8F6B2A] uppercase tracking-wider block mb-1">
               Data Protection
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1817]">
