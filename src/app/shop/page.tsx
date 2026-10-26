@@ -4,7 +4,7 @@ import { WebsiteHeader } from "@/components/website-header";
 import { WebsiteFooter } from "@/components/website-footer";
 import { ProductCard } from "@/components/product-card";
 import { CartProvider } from "@/lib/cart-context";
-import { Search, Filter, SlidersHorizontal, Sparkles } from "lucide-react";
+import { SlidersHorizontal, Sparkles } from "lucide-react";
 
 export default async function ShopPage({
   searchParams,
