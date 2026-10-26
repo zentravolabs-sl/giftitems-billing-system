@@ -69,7 +69,7 @@ export default async function HomePage() {
                   {/* Main H1 Headline */}
                   <div>
                     <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#24211D] tracking-tight leading-[1.15]">
-                      Handcrafted Wooden <br/> Lights,
+                      Handcrafted Wooden Lights,
                       <span className="text-[#8F6B2A]">Artificial Flowers</span> <br/>
                       &amp; Home Décor
                     </h1>
