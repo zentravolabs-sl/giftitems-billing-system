@@ -97,7 +97,6 @@ export default async function ProductPage({
                 id: img.id,
                 url: img.url,
                 publicId: img.publicId,
-                altText: img.altText,
                 isPrimary: img.isPrimary,
                 displayOrder: img.displayOrder,
               })),
