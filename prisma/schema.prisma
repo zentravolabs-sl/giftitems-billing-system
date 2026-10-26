@@ -1,0 +1,627 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CASHIER
+  INVENTORY_STAFF
+  ACCOUNTANT
+  CUSTOMER
+}
+
+enum DiscountType {
+  NONE
+  PERCENTAGE
+  FIXED
+}
+
+enum StockMovementType {
+  PURCHASE_RECEIVE
+  POS_SALE
+  WEB_SALE
+  CUSTOMER_RETURN
+  SUPPLIER_RETURN
+  DAMAGED
+  STOCK_ADJUSTMENT
+  OPENING_STOCK
+}
+
+enum PurchaseStatus {
+  ORDERED
+  RECEIVED
+  PARTIALLY_RECEIVED
+  CANCELLED
+}
+
+enum SaleChannel {
+  POS
+  WEBSITE
+}
+
+enum SaleStatus {
+  COMPLETED
+  HOLD
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  SPLIT
+  BANK_TRANSFER
+  ONLINE_GATEWAY
+  GIFT_VOUCHER
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  READY_FOR_DELIVERY
+  SHIPPED
+  COMPLETED
+  CANCELLED
+  RETURNED
+}
+
+enum ReturnType {
+  CUSTOMER_RETURN
+  SUPPLIER_RETURN
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ItemCondition {
+  RESTOCKABLE
+  DAMAGED
+}
+
+enum AdjustmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CASHIER)
+  phone        String?
+  avatarUrl    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sales            Sale[]            @relation("CashierSales")
+  purchasesCreated Purchase[]        @relation("UserPurchases")
+  supplierPayments SupplierPayment[] @relation("UserSupplierPayments")
+  movementsCreated InventoryMovement[] @relation("UserInventoryMovements")
+  adjustmentsApproved StockAdjustment[] @relation("ApprovedStockAdjustments")
+  adjustmentsCreated  StockAdjustment[] @relation("CreatedStockAdjustments")
+  expensesCreated  Expense[]         @relation("UserExpenses")
+  auditLogs        AuditLog[]        @relation("UserAuditLogs")
+  returnsApproved  Return[]          @relation("UserApprovedReturns")
+  customerAccount  Customer?
+
+  @@index([email])
+  @@index([role])
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  description String?
+  imageUrl    String?
+  displayOrder Int       @default(0)
+  isActive    Boolean    @default(true)
+  showOnWebsite Boolean  @default(true)
+  parentId    String?
+  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id], onDelete: SetNull)
+  subCategories Category[] @relation("SubCategories")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  products    Product[]
+
+  @@index([slug])
+  @@index([isActive, showOnWebsite])
+}
+
+model Product {
+  id            String       @id @default(uuid())
+  name          String
+  slug          String       @unique
+  sku           String       @unique
+  barcode       String?      @unique
+  categoryId    String
+  category      Category     @relation(fields: [categoryId], references: [id])
+  description   String?
+  buyingCost    Decimal      @default(0.00) @db.Decimal(12, 2)
+  sellingPrice  Decimal      @db.Decimal(12, 2)
+  discountType  DiscountType @default(NONE)
+  discountValue Decimal      @default(0.00) @db.Decimal(12, 2)
+  stockQuantity Decimal      @default(0.00) @db.Decimal(12, 2)
+  minStockLevel Decimal      @default(5.00) @db.Decimal(12, 2)
+  isActive      Boolean      @default(true)
+  showOnWebsite Boolean      @default(true)
+  isFeatured    Boolean      @default(false)
+  tags          String?
+  weight        String?
+  dimensions    String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  images             ProductImage[]
+  inventoryMovements InventoryMovement[]
+  purchaseItems      PurchaseItem[]
+  saleItems          SaleItem[]
+  orderItems         OrderItem[]
+  returnItems        ReturnItem[]
+  stockAdjustments   StockAdjustment[]
+
+  @@index([sku])
+  @@index([barcode])
+  @@index([categoryId])
+  @@index([isActive, showOnWebsite])
+  @@index([isFeatured])
+}
+
+model ProductImage {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url          String
+  publicId     String?
+  isPrimary    Boolean  @default(false)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([productId])
+}
+
+model Supplier {
+  id            String   @id @default(uuid())
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  address       String?
+  notes         String?
+  balanceDue    Decimal  @default(0.00) @db.Decimal(12, 2)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  purchases Purchase[]
+  payments  SupplierPayment[]
+  returns   Return[]
+
+  @@index([name])
+}
+
+model Purchase {
+  id             String         @id @default(uuid())
+  purchaseNumber String         @unique
+  supplierId     String
+  supplier       Supplier       @relation(fields: [supplierId], references: [id])
+  invoiceNumber  String?
+  purchaseDate   DateTime       @default(now())
+  status         PurchaseStatus @default(ORDERED)
+  subtotal       Decimal        @default(0.00) @db.Decimal(12, 2)
+  discount       Decimal        @default(0.00) @db.Decimal(12, 2)
+  additionalCost Decimal        @default(0.00) @db.Decimal(12, 2)
+  grandTotal     Decimal        @default(0.00) @db.Decimal(12, 2)
+  paidAmount     Decimal        @default(0.00) @db.Decimal(12, 2)
+  balanceDue     Decimal        @default(0.00) @db.Decimal(12, 2)
+  notes          String?
+  createdById    String
+  createdBy      User           @relation("UserPurchases", fields: [createdById], references: [id])
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  items    PurchaseItem[]
+  payments SupplierPayment[]
+  returns  Return[]
+
+  @@index([purchaseNumber])
+  @@index([supplierId])
+  @@index([status])
+}
+
+model PurchaseItem {
+  id               String   @id @default(uuid())
+  purchaseId       String
+  purchase         Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product  @relation(fields: [productId], references: [id])
+  quantityOrdered  Decimal  @db.Decimal(12, 2)
+  quantityReceived Decimal  @default(0.00) @db.Decimal(12, 2)
+  unitCost         Decimal  @db.Decimal(12, 2)
+  lineTotal        Decimal  @db.Decimal(12, 2)
+  createdAt        DateTime @default(now())
+
+  @@index([purchaseId])
+  @@index([productId])
+}
+
+model SupplierPayment {
+  id              String        @id @default(uuid())
+  supplierId      String
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  purchaseId      String?
+  purchase        Purchase?     @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+  amount          Decimal       @db.Decimal(12, 2)
+  paymentDate     DateTime      @default(now())
+  paymentMethod   PaymentMethod @default(CASH)
+  referenceNumber String?
+  notes           String?
+  createdById     String
+  createdBy       User          @relation("UserSupplierPayments", fields: [createdById], references: [id])
+  createdAt       DateTime      @default(now())
+
+  @@index([supplierId])
+  @@index([purchaseId])
+}
+
+model InventoryMovement {
+  id                String            @id @default(uuid())
+  productId         String
+  product           Product           @relation(fields: [productId], references: [id])
+  movementType      StockMovementType
+  quantityChange    Decimal           @db.Decimal(12, 2)
+  previousStock     Decimal           @db.Decimal(12, 2)
+  newStock          Decimal           @db.Decimal(12, 2)
+  unitCost          Decimal           @default(0.00) @db.Decimal(12, 2)
+  referenceDocument String?
+  notes             String?
+  createdById       String?
+  createdBy         User?             @relation("UserInventoryMovements", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt         DateTime          @default(now())
+
+  @@index([productId])
+  @@index([movementType])
+  @@index([referenceDocument])
+  @@index([createdAt])
+}
+
+model Customer {
+  id            String   @id @default(uuid())
+  name          String
+  email         String?
+  phone         String?
+  address       String?
+  city          String?
+  postalCode    String?
+  loyaltyPoints Int      @default(0)
+  notes         String?
+  userId        String?  @unique
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sales         Sale[]
+  websiteOrders WebsiteOrder[]
+  returns       Return[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+model Sale {
+  id              String      @id @default(uuid())
+  invoiceNumber   String      @unique
+  channel         SaleChannel @default(POS)
+  customerId      String?
+  customer        Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  cashierId       String?
+  cashier         User?       @relation("CashierSales", fields: [cashierId], references: [id], onDelete: SetNull)
+  status          SaleStatus  @default(COMPLETED)
+  subtotal        Decimal     @db.Decimal(12, 2)
+  cartDiscount    Decimal     @default(0.00) @db.Decimal(12, 2)
+  taxAmount       Decimal     @default(0.00) @db.Decimal(12, 2)
+  grandTotal      Decimal     @db.Decimal(12, 2)
+  paidAmount      Decimal     @default(0.00) @db.Decimal(12, 2)
+  changeAmount    Decimal     @default(0.00) @db.Decimal(12, 2)
+  notes           String?
+  syncId          String?     @unique
+  isOfflineSynced Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  items    SaleItem[]
+  payments Payment[]
+  returns  Return[]
+
+  @@index([invoiceNumber])
+  @@index([channel])
+  @@index([cashierId])
+  @@index([createdAt])
+  @@index([syncId])
+}
+
+model SaleItem {
+  id           String   @id @default(uuid())
+  saleId       String
+  sale         Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  quantity     Decimal  @db.Decimal(12, 2)
+  unitCost     Decimal  @default(0.00) @db.Decimal(12, 2)
+  unitPrice    Decimal  @db.Decimal(12, 2)
+  lineDiscount Decimal  @default(0.00) @db.Decimal(12, 2)
+  lineTotal    Decimal  @db.Decimal(12, 2)
+  createdAt    DateTime @default(now())
+
+  @@index([saleId])
+  @@index([productId])
+}
+
+model Payment {
+  id               String        @id @default(uuid())
+  saleId           String?
+  sale             Sale?         @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  orderId          String?
+  order            WebsiteOrder? @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method           PaymentMethod
+  amount           Decimal       @db.Decimal(12, 2)
+  status           PaymentStatus @default(CONFIRMED)
+  cardLast4        String?
+  cardTerminalRef  String?
+  transactionRef   String?
+  notes            String?
+  createdAt        DateTime      @default(now())
+
+  @@index([saleId])
+  @@index([orderId])
+  @@index([method])
+}
+
+model WebsiteOrder {
+  id                 String        @id @default(uuid())
+  orderNumber        String        @unique
+  customerId         String?
+  customer           Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName       String
+  customerEmail      String
+  customerPhone      String
+  shippingAddress    String
+  shippingCity       String
+  shippingPostalCode String?
+  orderNotes         String?
+  status             OrderStatus   @default(PENDING)
+  subtotal           Decimal       @db.Decimal(12, 2)
+  deliveryFee        Decimal       @default(0.00) @db.Decimal(12, 2)
+  discountAmount     Decimal       @default(0.00) @db.Decimal(12, 2)
+  grandTotal         Decimal       @db.Decimal(12, 2)
+  paymentMethod      PaymentMethod @default(CASH)
+  paymentStatus      PaymentStatus @default(PENDING)
+  trackingNumber     String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  items    OrderItem[]
+  payments Payment[]
+
+  @@index([orderNumber])
+  @@index([status])
+  @@index([customerEmail])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String       @id @default(uuid())
+  orderId      String
+  order        WebsiteOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product      @relation(fields: [productId], references: [id])
+  quantity     Decimal      @db.Decimal(12, 2)
+  unitCost     Decimal      @default(0.00) @db.Decimal(12, 2)
+  unitPrice    Decimal      @db.Decimal(12, 2)
+  lineDiscount Decimal      @default(0.00) @db.Decimal(12, 2)
+  lineTotal    Decimal      @db.Decimal(12, 2)
+  createdAt    DateTime     @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model DiscountCoupon {
+  id           String       @id @default(uuid())
+  code         String       @unique
+  description  String?
+  discountType DiscountType @default(PERCENTAGE)
+  value        Decimal      @db.Decimal(12, 2)
+  minPurchase  Decimal      @default(0.00) @db.Decimal(12, 2)
+  maxDiscount  Decimal?     @db.Decimal(12, 2)
+  startDate    DateTime?
+  endDate      DateTime?
+  usageLimit   Int?
+  usageCount   Int          @default(0)
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model Expense {
+  id              String        @id @default(uuid())
+  title           String
+  category        String
+  amount          Decimal       @db.Decimal(12, 2)
+  expenseDate     DateTime      @default(now())
+  paymentMethod   PaymentMethod @default(CASH)
+  referenceNumber String?
+  notes           String?
+  createdById     String
+  createdBy       User          @relation("UserExpenses", fields: [createdById], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([category])
+  @@index([expenseDate])
+}
+
+model Return {
+  id                 String        @id @default(uuid())
+  returnNumber       String        @unique
+  returnType         ReturnType
+  originalSaleId     String?
+  sale               Sale?         @relation(fields: [originalSaleId], references: [id], onDelete: SetNull)
+  originalPurchaseId String?
+  purchase           Purchase?     @relation(fields: [originalPurchaseId], references: [id], onDelete: SetNull)
+  customerId         String?
+  customer           Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  supplierId         String?
+  supplier           Supplier?     @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  totalRefundAmount  Decimal       @db.Decimal(12, 2)
+  status             ReturnStatus  @default(PENDING)
+  reason             String?
+  approvedById       String?
+  approvedBy         User?         @relation("UserApprovedReturns", fields: [approvedById], references: [id], onDelete: SetNull)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  items ReturnItem[]
+
+  @@index([returnNumber])
+  @@index([returnType])
+}
+
+model ReturnItem {
+  id           String        @id @default(uuid())
+  returnId     String
+  returnOrder  Return        @relation(fields: [returnId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product       @relation(fields: [productId], references: [id])
+  quantity     Decimal       @db.Decimal(12, 2)
+  unitPrice    Decimal       @db.Decimal(12, 2)
+  refundAmount Decimal       @db.Decimal(12, 2)
+  condition    ItemCondition @default(RESTOCKABLE)
+  isRestocked  Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+
+  @@index([returnId])
+  @@index([productId])
+}
+
+model StockAdjustment {
+  id               String           @id @default(uuid())
+  adjustmentNumber String           @unique
+  productId        String
+  product          Product          @relation(fields: [productId], references: [id])
+  previousStock    Decimal          @db.Decimal(12, 2)
+  adjustedStock    Decimal          @db.Decimal(12, 2)
+  difference       Decimal          @db.Decimal(12, 2)
+  reason           String
+  notes            String?
+  status           AdjustmentStatus @default(APPROVED)
+  approvedById     String?
+  approvedBy       User?            @relation("ApprovedStockAdjustments", fields: [approvedById], references: [id], onDelete: SetNull)
+  createdById      String
+  createdBy        User             @relation("CreatedStockAdjustments", fields: [createdById], references: [id])
+  createdAt        DateTime         @default(now())
+
+  @@index([adjustmentNumber])
+  @@index([productId])
+}
+
+model BusinessSettings {
+  id                      String   @id @default("default")
+  shopName                String   @default("Zentravo Luxury Gifts")
+  legalName               String?  @default("Zentravo Gift Boutique Inc.")
+  tagline                 String?  @default("Curated Moments & Exquisite Gifts")
+  taxNumber               String?
+  address                 String   @default("108 Lotus Boulevard, Cinnamon Gardens")
+  phone                   String   @default("+1 (800) 555-4438")
+  whatsappNumber          String   @default("+18005554438")
+  email                   String   @default("contact@zentravogifts.com")
+  openingHours            String   @default("Mon - Sun: 9:00 AM - 9:00 PM")
+  currencySymbol          String   @default("$")
+  currencyCode            String   @default("USD")
+  invoicePrefix           String   @default("ZGB-")
+  receiptFooterMessage    String   @default("Thank you for shopping at Zentravo! Every gift tells a story.")
+  logoUrl                 String?
+  enableTax               Boolean  @default(false)
+  taxPercentage           Decimal  @default(0.00) @db.Decimal(5, 2)
+  enableVouchers          Boolean  @default(true)
+  defaultLowStockThreshold Decimal  @default(5.00) @db.Decimal(12, 2)
+  updatedAt               DateTime @updatedAt
+}
+
+model WebsiteContent {
+  id                 String   @id @default("default")
+  heroTitle          String   @default("Artisanal Gifts for Life's Cherished Moments")
+  heroSubtitle       String   @default("Discover hand-crafted gift hampers, bespoke jewellery, luxury candles, and personalized keepsakes curated with elegance.")
+  heroButtonText     String   @default("Explore Collections")
+  heroButtonLink     String   @default("/shop")
+  heroImageUrl       String?  @default("https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1400&auto=format&fit=crop")
+  promoBannerActive  Boolean  @default(true)
+  promoBannerText    String   @default("Special Offer: Complimentary Luxury Gift Box & Card on orders over $50 | Use Code: GIFT2026")
+  promoBannerLink    String?  @default("/offers")
+  aboutUsTitle       String   @default("The Art of Thoughtful Gifting")
+  aboutUsContent     String   @default("At Zentravo, we believe every gift should evoke emotion and wonder. Founded with a passion for exceptional craftsmanship and timeless aesthetics, our collections are carefully curated from master artisans and luxury makers around the world.")
+  aboutUsImageUrl    String?  @default("https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=1200&auto=format&fit=crop")
+  deliveryPolicy     String   @default("Standard delivery arrives in 2-4 business days. Express same-day courier service is available for orders placed before 1:00 PM.")
+  returnPolicy       String   @default("We offer a 14-day hassle-free return or exchange policy on non-personalized gift items in original packaging.")
+  privacyPolicy      String   @default("Your privacy is sacred. We never share your personal information with third parties and ensure bank-grade encryption on all transactions.")
+  termsPolicy        String   @default("By using our services, you agree to our standard terms and conditions. Promotional codes cannot be combined with clearance pricing.")
+  facebookUrl        String?  @default("https://facebook.com/zentravogifts")
+  instagramUrl       String?  @default("https://instagram.com/zentravogifts")
+  tiktokUrl          String?  @default("https://tiktok.com/@zentravogifts")
+  pinterestUrl       String?  @default("https://pinterest.com/zentravogifts")
+  updatedAt          DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation("UserAuditLogs", fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  details    String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+}
+
+model SyncLog {
+  id            String   @id @default(uuid())
+  clientId      String
+  transactionId String   @unique
+  action        String
+  status        String
+  payload       String?
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+
+  @@index([transactionId])
+  @@index([status])
+}

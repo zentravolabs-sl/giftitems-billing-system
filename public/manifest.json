@@ -1,0 +1,17 @@
+{
+  "name": "Zentravo POS — Gift Items Shop Management",
+  "short_name": "Zentravo POS",
+  "description": "High-speed offline-resilient Point of Sale application for Zentravo Luxury Gifts",
+  "start_url": "/pos",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#B85D4D",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
