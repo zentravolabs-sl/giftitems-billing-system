@@ -1,28 +1,31 @@
-import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { neonConfig, Pool } from "@neondatabase/serverless";
+import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
+import ws from "ws";
+
+// Enable WebSocket support for Neon serverless driver (avoids cold-start TCP timeouts)
+neonConfig.webSocketConstructor = ws;
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
-  pgPool: Pool | undefined;
+  neonPool: Pool | undefined;
 };
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL!;
 
 const pool =
-  globalForPrisma.pgPool ??
+  globalForPrisma.neonPool ??
   new Pool({
     connectionString,
-    max: 10,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000,
+    // Keep a small pool – Neon free tier limits concurrent connections
+    max: 5,
   });
 
 if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.pgPool = pool;
+  globalForPrisma.neonPool = pool;
 }
 
-const adapter = new PrismaPg(pool);
+const adapter = new PrismaNeon(pool);
 
 export const prisma =
   globalForPrisma.prisma ??

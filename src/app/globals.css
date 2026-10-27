@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-cormorant: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-cormorant: "Lora", ui-serif, Georgia, serif;
   --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -12,12 +12,12 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-serif: var(--font-cormorant), "Lora", ui-serif, Georgia, serif;
   --font-mono: var(--font-geist-mono);
 }
 
 .font-serif {
-  font-family: var(--font-cormorant), "Cormorant Garamond", ui-serif, Georgia, serif;
+  font-family: var(--font-cormorant), "Lora", ui-serif, Georgia, serif;
 }
 
 .font-sans {

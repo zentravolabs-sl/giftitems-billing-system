@@ -16,8 +16,33 @@ import {
   Lamp,
 } from "lucide-react";
 
+/** Retry a Prisma query up to `attempts` times on Neon cold-start timeouts. */
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  attempts = 3,
+  delayMs = 300
+): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      const msg = err instanceof Error ? err.message : String(err);
+      const isTimeout =
+        msg.includes("Connection terminated") ||
+        msg.includes("connection timeout") ||
+        msg.includes("ECONNRESET") ||
+        msg.includes("ETIMEDOUT");
+      if (!isTimeout || i === attempts - 1) throw err;
+      await new Promise((r) => setTimeout(r, delayMs * (i + 1)));
+    }
+  }
+  throw lastError;
+}
+
 export default async function HomePage() {
-  const [content, categories, featuredProducts, newArrivals] = await Promise.all([
+  const [content, categories, featuredProducts, newArrivals] = await withRetry(() => Promise.all([
     prisma.websiteContent.findUnique({ where: { id: "default" } }),
     prisma.category.findMany({
       where: { isActive: true, showOnWebsite: true },
@@ -42,7 +67,7 @@ export default async function HomePage() {
         images: { orderBy: [{ isPrimary: "desc" }, { displayOrder: "asc" }] },
       },
     }),
-  ]);
+  ]));
 
   const heroImage =
     content?.heroImageUrl ||
